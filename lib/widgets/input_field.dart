@@ -3,11 +3,26 @@ import 'package:postulaciones_app/theme/app_colors.dart';
 
 class InputField extends StatelessWidget {
   final String label;
+  final String? initialValue;
   final String placeholder;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+  final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
+  final void Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
+
   const InputField({
     super.key,
     required this.label,
+    this.initialValue,
     this.placeholder = 'Placeholder',
+    this.keyboardType,
+    this.obscureText = false,
+    this.validator,
+    this.onSaved,
+    this.onFieldSubmitted,
+    this.focusNode,
   });
 
   @override
@@ -17,15 +32,21 @@ class InputField extends StatelessWidget {
       children: [
         Text(
           label.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
-            letterSpacing: 0.5,
-          ),
+          style: Theme.of(context).textTheme.labelMedium,
         ),
+
+        const SizedBox(height: 5),
+
         TextFormField(
-          style: const TextStyle(fontSize: 15),
+          initialValue: initialValue,
+          focusNode: focusNode,
+          keyboardType: keyboardType,
+          obscureText: obscureText,
+          validator: validator,
+          onSaved: onSaved,
+          onFieldSubmitted: onFieldSubmitted,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: const TextStyle(color: AppColors.textSecondary),
