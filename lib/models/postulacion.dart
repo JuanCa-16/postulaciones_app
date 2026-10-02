@@ -1,3 +1,7 @@
+import 'package:url_launcher/url_launcher.dart';
+
+import 'estado.dart';
+import 'historial.dart';
 import 'modalidad.dart';
 
 class PostulacionFormulario {
@@ -26,6 +30,64 @@ class PostulacionFormulario {
         'paginaAplicacion: $paginaAplicacion, '
         'modalidad: ${modalidad.valor}, '
         'estadoId: $estadoId'
+        ')';
+  }
+}
+
+class Postulacion {
+  final int id;
+  final String nombreOferta;
+  final String? nombreEmpresa;
+  final String? url;
+  final String? paginaAplicacion;
+  final Modalidad modalidad;
+  final String fecha;
+  final Estado estado;
+  final List<Historial>? historial;
+
+  const Postulacion({
+    required this.id,
+    required this.nombreOferta,
+    this.nombreEmpresa,
+    this.url,
+    this.paginaAplicacion,
+    required this.modalidad,
+    required this.fecha,
+    required this.estado,
+    this.historial,
+  });
+
+  String get fechaFormateada {
+    if (fecha.trim().isEmpty) return 'Sin fecha';
+    final date = DateTime.tryParse(
+      fecha,
+    ); // tryParse no crashea, devuelve null si falla
+    if (date == null) return 'Fecha inválida';
+
+    return '${date.day.toString().padLeft(2, '0')}/'
+        '${date.month.toString().padLeft(2, '0')}/'
+        '${date.year}';
+  }
+
+  Future<void> abrirUrl() async {
+    if (url == null || url!.trim().isEmpty) return;
+    final uri = Uri.tryParse(url!);
+    if (uri == null || !uri.hasScheme) return;
+    await launchUrl(uri);
+  }
+
+  @override
+  String toString() {
+    return 'Postulacion('
+        'id: $id, '
+        'nombreOferta: $nombreOferta, '
+        'nombreEmpresa: $nombreEmpresa, '
+        'url: $url, '
+        'paginaAplicacion: $paginaAplicacion, '
+        'modalidad: ${modalidad.valor}, '
+        'fecha: $fecha, '
+        'estado: ${estado.nombre}, '
+        'historial: $historial'
         ')';
   }
 }
