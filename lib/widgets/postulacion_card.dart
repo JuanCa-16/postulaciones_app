@@ -11,7 +11,7 @@ class PostulacionCard extends StatelessWidget {
   final Postulacion postulacion;
   final bool expandido;
   final VoidCallback onTap;
-  final VoidCallback? onEditar;
+  final VoidCallback? onDetalles;
   final VoidCallback? onEliminar;
 
   const PostulacionCard({
@@ -19,7 +19,7 @@ class PostulacionCard extends StatelessWidget {
     required this.postulacion,
     required this.expandido,
     required this.onTap,
-    this.onEditar,
+    this.onDetalles,
     this.onEliminar,
   });
 
@@ -38,7 +38,7 @@ class PostulacionCard extends StatelessWidget {
         children: [
           // Botón redondo 1 (Ej: Editar)
           CustomSlidableAction(
-            onPressed: (context) => onEditar?.call(),
+            onPressed: (context) => onDetalles?.call(),
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.blue,
             child: Container(
@@ -48,7 +48,11 @@ class PostulacionCard extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Center(
-                child: Icon(Icons.edit, color: Colors.blue, size: 22),
+                child: Icon(
+                  Icons.manage_history_rounded,
+                  color: Colors.blue,
+                  size: 22,
+                ),
               ),
             ),
           ),

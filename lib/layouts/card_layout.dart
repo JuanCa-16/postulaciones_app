@@ -6,18 +6,20 @@ class CardLayout extends StatelessWidget {
   final String title;
   final String description;
   final Widget child;
+  final Color? color;
 
   const CardLayout({
     super.key,
     required this.title,
     required this.description,
     required this.child,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Background(
-      statusColor: Colors.deepPurple,
+      statusColor: color ?? Colors.deepPurple,
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 24),
         child: Center(

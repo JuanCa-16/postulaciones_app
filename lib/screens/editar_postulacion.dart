@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:postulaciones_app/models/estado.dart';
-import 'package:postulaciones_app/models/modalidad.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/screens/postulacion_form.dart';
 
 class EditarPostulacion extends StatelessWidget {
-  const EditarPostulacion({super.key});
+  final Postulacion postulacion;
+  const EditarPostulacion({super.key, required this.postulacion});
 
   @override
   Widget build(BuildContext context) {
-    final postulacion = PostulacionFormulario(
-      nombreOferta: 'Frontend Developer',
-      nombreEmpresa: 'Google',
-      url: 'https://google.com/jobs',
-      paginaAplicacion: 'LinkedIn',
-      modalidad: Modalidad.REMOTO,
-      estadoId: 2,
-    );
-
     return Scaffold(
       body: PostulacionForm(
-        datosIniciales: postulacion,
+        color: postulacion.estado.colorParsed,
+        datosIniciales: postulacion.datosParaFormulario,
         estados: const [
           Estado(id: 1, nombre: 'Aplicado', color: '#3B82F6', porDefecto: true),
           Estado(

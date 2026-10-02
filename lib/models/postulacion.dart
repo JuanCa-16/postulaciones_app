@@ -69,6 +69,17 @@ class Postulacion {
         '${date.year}';
   }
 
+  PostulacionFormulario get datosParaFormulario {
+    return PostulacionFormulario(
+      nombreOferta: nombreOferta,
+      nombreEmpresa: nombreEmpresa,
+      url: url,
+      paginaAplicacion: paginaAplicacion,
+      modalidad: modalidad,
+      estadoId: estado.id,
+    );
+  }
+
   Future<void> abrirUrl() async {
     if (url == null || url!.trim().isEmpty) return;
     final uri = Uri.tryParse(url!);

@@ -11,6 +11,7 @@ import 'package:postulaciones_app/widgets/loading_overlay.dart';
 class PostulacionForm extends StatefulWidget {
   final PostulacionFormulario? datosIniciales;
   final List<Estado> estados;
+  final Color? color;
   final void Function(PostulacionFormulario postulacion) onSubmit;
 
   const PostulacionForm({
@@ -18,6 +19,7 @@ class PostulacionForm extends StatefulWidget {
     this.datosIniciales,
     required this.estados,
     required this.onSubmit,
+    this.color,
   });
 
   @override
@@ -94,6 +96,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
     return Stack(
       children: [
         CardLayout(
+          color: widget.color,
           title: 'Crear nueva postulación',
           description:
               'Ingresa las características y el estado actual de la oferta',

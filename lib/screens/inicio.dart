@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
+import 'package:postulaciones_app/screens/crear_postulacion.dart';
 import 'package:postulaciones_app/widgets/postulacion_card.dart';
 import 'package:postulaciones_app/screens/detalles_postulacion.dart';
 
@@ -17,41 +18,53 @@ class _InicioState extends State<Inicio> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: SlidableAutoCloseBehavior(
-        closeWhenOpened: true,
-        child: Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: widget.postulaciones.map((postulacion) {
-            return PostulacionCard(
-              key: ValueKey(postulacion.id),
-              postulacion: postulacion,
-              expandido: postulacionExpandida == postulacion.id,
-              onTap: () {
-                setState(() {
-                  postulacionExpandida = postulacionExpandida == postulacion.id
-                      ? null
-                      : postulacion.id;
-                });
-              },
-              onEditar: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        DetallesPostulacion(postulacion: postulacion),
-                  ),
-                );
-              },
-              onEliminar: () {
-                // Lógica de eliminar
-              },
-            );
-          }).toList(),
+    return Scaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: SlidableAutoCloseBehavior(
+          closeWhenOpened: true,
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: widget.postulaciones.map((postulacion) {
+              return PostulacionCard(
+                key: ValueKey(postulacion.id),
+                postulacion: postulacion,
+                expandido: postulacionExpandida == postulacion.id,
+                onTap: () {
+                  setState(() {
+                    postulacionExpandida = postulacionExpandida == postulacion.id
+                        ? null
+                        : postulacion.id;
+                  });
+                },
+                onDetalles: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DetallesPostulacion(postulacion: postulacion),
+                    ),
+                  );
+                },
+                onEliminar: () {
+                  // Lógica de eliminar
+                },
+              );
+            }).toList(),
+          ),
         ),
       ),
+    
+     floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CrearPostulacion()),
+            );
+          },
+          child: const Icon(Icons.add),
+        ),
     );
   }
 }
