@@ -34,19 +34,32 @@ class HistoryCard extends StatelessWidget {
             SizedBox(height: 10),
             Row(
               children: [
-                LabelText(label: 'Anterior', text: item.valorAntiguo ?? 'N/A'),
+                Expanded(
+                  child: LabelText(
+                    label: 'Anterior',
+                    text: item.valorAntiguo ?? 'N/A',
+                  ),
+                ),
 
-                SizedBox(
-                  width: 40,
-                  child: Center(
-                    child: Text(
-                      '➔',
-                      style: Theme.of(context).textTheme.labelMedium,
+                Expanded(
+                  child: SizedBox(
+                    width: 40,
+                    child: Center(
+                      child: Text(
+                        '➔',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
                     ),
                   ),
                 ),
 
-                LabelText(label: 'Actual', text: item.valorNuevo, color: AppColors.buttonPrimary,),
+                Expanded(
+                  child: LabelText(
+                    label: 'Actual',
+                    text: item.valorNuevo,
+                    color: AppColors.buttonPrimary,
+                  ),
+                ),
               ],
             ),
           ],

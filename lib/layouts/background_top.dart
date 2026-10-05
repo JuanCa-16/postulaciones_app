@@ -27,12 +27,12 @@ class BackgroundTop extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: FractionallySizedBox(
               widthFactor: 1,
-              heightFactor: 0.20,
+              heightFactor: 0.3,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 300),
+                constraints: const BoxConstraints(maxHeight: 350),
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
-                  child: Container(color: statusColor),
+                  child: Container(color: statusColor.withValues(alpha: 0.5)),
                 ),
               ),
             ),

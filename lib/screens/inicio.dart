@@ -61,7 +61,7 @@ class _InicioState extends State<Inicio> {
     return LoadingOverlay(
       loading: cargando,
       child: Scaffold(
-        appBar: AppBar(title: Text('MIS POSTULACIONES'),),
+        appBar: AppBar(title: const Text('MIS POSTULACIONES')),
         body: error != null
             ? Center(
                 child: Padding(
@@ -85,15 +85,17 @@ class _InicioState extends State<Inicio> {
                   ),
                 ),
               )
-            : SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: SlidableAutoCloseBehavior(
-                  closeWhenOpened: true,
-                  child: Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: postulaciones.map((postulacion) {
-                      return PostulacionCard(
+            : SlidableAutoCloseBehavior(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: postulaciones.length,
+                  itemBuilder: (context, index) {
+                    final postulacion = postulaciones[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 12,
+                      ), // Espaciado vertical entre tarjetas
+                      child: PostulacionCard(
                         key: ValueKey(postulacion.id),
                         postulacion: postulacion,
                         expandido: postulacionExpandida == postulacion.id,
@@ -134,18 +136,21 @@ class _InicioState extends State<Inicio> {
                             },
                           );
                         },
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.buttonPrimary,
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CrearPostulacion()),
             );
+
+            if (!mounted) return;
+            await _cargarPostulaciones();
           },
           child: const Icon(Icons.add, color: AppColors.inputBackground),
         ),

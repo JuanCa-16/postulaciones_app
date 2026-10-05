@@ -6,6 +6,7 @@ import 'package:postulaciones_app/services/auth_service.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
 import 'package:postulaciones_app/widgets/input_field.dart';
 import 'package:postulaciones_app/widgets/loading_overlay.dart';
+import 'package:postulaciones_app/widgets/dialog_helper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,8 +48,15 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => const Inicio()),
       );
     } catch (e) {
+      if (!mounted) return;
+
       final mensaje = e.toString().replaceFirst('Exception: ', '');
-      await _mostrarError(mensaje);
+
+      await DialogHelper.mostrarError(
+        context,
+        mensaje,
+        titulo: 'Error al iniciar sesión',
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -56,26 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     }
-  }
-
-  Future<void> _mostrarError(String mensaje) async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Error al iniciar sesión'),
-          content: Text(mensaje),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Aceptar'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

@@ -32,6 +32,17 @@ class PostulacionFormulario {
         'estadoId: $estadoId'
         ')';
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nombreOferta': nombreOferta,
+      'nombreEmpresa': nombreEmpresa,
+      'url': url,
+      'paginaAplicacion': paginaAplicacion,
+      'modalidad': modalidad.valor,
+      'estadoId': estadoId,
+    };
+  }
 }
 
 class Postulacion {
