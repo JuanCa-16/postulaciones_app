@@ -3,17 +3,23 @@ import 'package:postulaciones_app/layouts/background_top.dart';
 import 'package:postulaciones_app/layouts/timeline.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/screens/editar_postulacion.dart';
+import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
 import 'package:postulaciones_app/widgets/glass_card.dart';
 import 'package:postulaciones_app/widgets/label_text.dart';
 import 'package:postulaciones_app/widgets/status_tag.dart';
+import 'package:postulaciones_app/widgets/confirm_dialog.dart';
 
 class DetallesPostulacion extends StatelessWidget {
   final Postulacion postulacion;
   const DetallesPostulacion({super.key, required this.postulacion});
 
+  
+
   @override
   Widget build(BuildContext context) {
+
+    debugPrint('💯💯💯 $postulacion');
     return Scaffold(
       body: BackgroundTop(
         statusColor: postulacion.estado.colorParsed,
@@ -101,16 +107,47 @@ class DetallesPostulacion extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditarPostulacion(postulacion: postulacion),
-            ),
-          );
-        },
-        child: const Icon(Icons.edit),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: 'editar',
+            backgroundColor: postulacion.estado.colorParsed,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      EditarPostulacion(postulacion: postulacion),
+                ),
+              );
+            },
+            child: const Icon(Icons.edit, color: AppColors.inputBackground),
+          ),
+          const SizedBox(height: 12),
+
+          FloatingActionButton(
+            heroTag: 'eliminar',
+            backgroundColor: Colors.red,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return ConfirmDialog(
+                    title: 'Eliminar postulación',
+                    message:
+                        '¿Estás seguro de que deseas eliminar esta postulación?',
+                    confirmText: 'Eliminar',
+                    onConfirm: () {
+                      // Aquí posteriormente eliminaremos la postulación.
+                    },
+                  );
+                },
+              );
+            },
+            child: const Icon(Icons.delete, color: AppColors.inputBackground),
+          ),
+        ],
       ),
     );
   }

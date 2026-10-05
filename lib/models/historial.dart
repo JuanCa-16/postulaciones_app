@@ -32,4 +32,13 @@ class Historial {
         'fechaActualizacion: $fechaActualizacion'
         ')';
   }
+
+  factory Historial.fromJson(Map<String, dynamic> json) {
+    return Historial(
+      campoActualizado: json['campoActualizado'],
+      valorAntiguo: json['valorAntiguo'],
+      valorNuevo: json['valorNuevo'],
+      fechaActualizacion: json['fechaActualizacion'],
+    );
+  }
 }

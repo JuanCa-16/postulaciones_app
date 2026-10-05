@@ -16,4 +16,13 @@ class Estado {
   Color get colorParsed {
     return Color(int.parse(color.replaceAll('#', '0xFF')));
   }
+
+  factory Estado.fromJson(Map<String, dynamic> json) {
+    return Estado(
+      id: json['id'],
+      nombre: json['nombre'],
+      color: json['color'],
+      porDefecto: json['porDefecto'],
+    );
+  }
 }

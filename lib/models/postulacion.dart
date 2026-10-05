@@ -101,4 +101,22 @@ class Postulacion {
         'historial: $historial'
         ')';
   }
+
+  factory Postulacion.fromJson(Map<String, dynamic> json) {
+    return Postulacion(
+      id: json['id'],
+      nombreOferta: json['nombreOferta'],
+      nombreEmpresa: json['nombreEmpresa'],
+      url: json['url'],
+      paginaAplicacion: json['paginaAplicacion'],
+      modalidad: Modalidad.fromJson(json['modalidad']),
+      fecha: json['fecha'],
+      estado: Estado.fromJson(json['estado']),
+      historial: json['historial'] != null
+          ? (json['historial'] as List)
+                .map((item) => Historial.fromJson(item as Map<String, dynamic>))
+                .toList()
+          : null,
+    );
+  }
 }

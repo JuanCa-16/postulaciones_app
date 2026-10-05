@@ -51,7 +51,12 @@ class LabelText extends StatelessWidget {
                   ),
                 ),
               )
-            : Text(text, style: Theme.of(context).textTheme.bodyLarge),
+            : Text(
+                text,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: color),
+              ),
       ],
     );
   }

@@ -93,209 +93,212 @@ class _PostulacionFormState extends State<PostulacionForm> {
   @override
   Widget build(BuildContext context) {
     final datos = widget.datosIniciales;
-    return Stack(
-      children: [
-        CardLayout(
-          color: widget.color,
-          title: 'Crear nueva postulación',
-          description:
-              'Ingresa las características y el estado actual de la oferta',
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InputField(
-                  label: 'Nombre de la oferta *',
-                  initialValue: datos?.nombreOferta,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'El nombre de la oferta es obligatorio.';
-                    }
+    return LoadingOverlay(
+      loading: cargando,
+      child: CardLayout(
+        color: widget.color,
+        title: datos == null ? 'Crear Nueva Postulación' : 'Editar Postulación',
+        description:
+            'Ingresa las características y el estado actual de la oferta',
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InputField(
+                label: 'Nombre de la oferta *',
+                initialValue: datos?.nombreOferta,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'El nombre de la oferta es obligatorio.';
+                  }
 
-                    return null;
-                  },
-                  onSaved: (value) {
-                    nombreOferta = value ?? '';
-                  },
-                  onFieldSubmitted: (_) {
-                    _empresaFocus.requestFocus();
-                  },
-                ),
+                  return null;
+                },
+                onSaved: (value) {
+                  nombreOferta = value ?? '';
+                },
+                onFieldSubmitted: (_) {
+                  _empresaFocus.requestFocus();
+                },
+              ),
 
-                const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-                InputField(
-                  label: 'Empresa ',
-                  initialValue: datos?.nombreEmpresa,
-                  keyboardType: TextInputType.text,
-                  focusNode: _empresaFocus,
-                  onSaved: (value) {
-                    nombreEmpresa = value ?? '';
-                  },
-                  onFieldSubmitted: (_) {
-                    _urlFocus.requestFocus();
-                  },
-                ),
+              InputField(
+                label: 'Empresa ',
+                initialValue: datos?.nombreEmpresa,
+                keyboardType: TextInputType.text,
+                focusNode: _empresaFocus,
+                onSaved: (value) {
+                  nombreEmpresa = value ?? '';
+                },
+                onFieldSubmitted: (_) {
+                  _urlFocus.requestFocus();
+                },
+              ),
 
-                const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: InputField(
-                        label: 'URL de la oferta',
-                        initialValue: datos?.url,
-                        keyboardType: TextInputType.url,
-                        focusNode: _urlFocus,
-                        onSaved: (value) {
-                          url = value ?? '';
-                        },
-                        onFieldSubmitted: (_) {
-                          _paginaAplicacionFocus.requestFocus();
-                        },
-                      ),
+              Row(
+                children: [
+                  Expanded(
+                    child: InputField(
+                      label: 'URL de la oferta',
+                      initialValue: datos?.url,
+                      keyboardType: TextInputType.url,
+                      focusNode: _urlFocus,
+                      onSaved: (value) {
+                        url = value ?? '';
+                      },
+                      onFieldSubmitted: (_) {
+                        _paginaAplicacionFocus.requestFocus();
+                      },
                     ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: InputField(
-                        label: 'Plataforma / Portal',
-                        initialValue: datos?.paginaAplicacion,
-                        keyboardType: TextInputType.text,
-                        focusNode: _paginaAplicacionFocus,
-                        onSaved: (value) {
-                          paginaAplicacion = value ?? '';
-                        },
-                      ),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: InputField(
+                      label: 'Plataforma / Portal',
+                      initialValue: datos?.paginaAplicacion,
+                      keyboardType: TextInputType.text,
+                      focusNode: _paginaAplicacionFocus,
+                      onSaved: (value) {
+                        paginaAplicacion = value ?? '';
+                      },
                     ),
-                  ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 15),
+
+              Text(
+                'Modalidad *'.toUpperCase(),
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+
+              const SizedBox(height: 5),
+
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  spacing: 8,
+                  alignment: WrapAlignment.start,
+                  children: Modalidad.values.map((modalidadItem) {
+                    return ChoiceChip(
+                      label: Text(
+                        nombreModalidad(modalidadItem),
+                        style: TextStyle(
+                          color: modalidad == modalidadItem
+                              ? Colors.white
+                              : AppColors.textSecondary,
+                        ),
+                      ),
+                      selected: modalidad == modalidadItem,
+                      showCheckmark: false,
+                      color: WidgetStateColor.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return AppColors.buttonPrimary;
+                        }
+
+                        return AppColors.inputBackground;
+                      }),
+
+                      onSelected: (_) {
+                        setState(() => modalidad = modalidadItem);
+                      },
+                    );
+                  }).toList(),
                 ),
+              ),
 
-                const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-                Text(
-                  'Modalidad *'.toUpperCase(),
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
+              Text(
+                'Estado actual *'.toUpperCase(),
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
 
-                const SizedBox(height: 5),
+              const SizedBox(height: 5),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    spacing: 8,
-                    alignment: WrapAlignment.start,
-                    children: Modalidad.values.map((modalidadItem) {
-                      return ChoiceChip(
-                        label: Text(
-                          nombreModalidad(modalidadItem),
-                          style: TextStyle(
-                            color: modalidad == modalidadItem
-                                ? Colors.white
-                                : AppColors.textSecondary,
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  spacing: 8,
+                  alignment: WrapAlignment.start,
+                  children: widget.estados.map((estado) {
+                    return ChoiceChip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: estadoId == estado.id
+                                  ? Colors.white
+                                  : estado.colorParsed,
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                        ),
-                        selected: modalidad == modalidadItem,
-                        showCheckmark: false,
-                        color: WidgetStateColor.resolveWith((states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return AppColors.buttonPrimary;
-                          }
-
-                          return AppColors.inputBackground;
-                        }),
-
-                        onSelected: (_) {
-                          setState(() => modalidad = modalidadItem);
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ),
-
-                const SizedBox(height: 15),
-
-                Text(
-                  'Estado actual *'.toUpperCase(),
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-
-                const SizedBox(height: 5),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    spacing: 8,
-                    alignment: WrapAlignment.start,
-                    children: widget.estados.map((estado) {
-                      return ChoiceChip(
-                        label: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: estadoId == estado.id
-                                    ? Colors.white
-                                    : estado.colorParsed,
-                                shape: BoxShape.circle,
-                              ),
+                          const SizedBox(width: 6),
+                          Text(
+                            estado.nombre,
+                            style: TextStyle(
+                              color: estadoId == estado.id
+                                  ? Colors.white
+                                  : AppColors.textSecondary,
                             ),
-                            const SizedBox(width: 6),
-                            Text(
-                              estado.nombre,
-                              style: TextStyle(
-                                color: estadoId == estado.id
-                                    ? Colors.white
-                                    : AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        selected: estadoId == estado.id,
-                        showCheckmark: false,
-                        color: WidgetStateColor.resolveWith((states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return estado.colorParsed;
-                          }
+                          ),
+                        ],
+                      ),
+                      selected: estadoId == estado.id,
+                      showCheckmark: false,
+                      color: WidgetStateColor.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return estado.colorParsed;
+                        }
 
-                          return AppColors.inputBackground;
-                        }),
-                        side: BorderSide(
-                          color: AppColors.inputFocusedBorder,
-                          width: 1,
-                        ),
-                        onSelected: (_) {
-                          setState(() => estadoId = estado.id);
-                        },
-                      );
-                    }).toList(),
+                        return AppColors.inputBackground;
+                      }),
+                      side: BorderSide(
+                        color: AppColors.inputFocusedBorder,
+                        width: 1,
+                      ),
+                      onSelected: (_) {
+                        setState(() => estadoId = estado.id);
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              const DashedLine(),
+
+              const SizedBox(height: 15),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: widget.color != null
+                        ? WidgetStatePropertyAll(widget.color)
+                        : null,
+                  ),
+                  onPressed: cargando ? null : _guardar,
+                  child: Text(
+                    datos == null ? 'Crear postulación' : 'Guardar cambios',
                   ),
                 ),
-
-                const SizedBox(height: 15),
-
-                const DashedLine(),
-
-                const SizedBox(height: 15),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: cargando ? null : _guardar,
-                    child: Text(
-                      datos == null ? 'Crear postulación' : 'Guardar cambios',
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        LoadingOverlay(loading: cargando),
-      ],
+      ),
     );
   }
 }

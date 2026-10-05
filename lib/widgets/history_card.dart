@@ -46,7 +46,7 @@ class HistoryCard extends StatelessWidget {
                   ),
                 ),
 
-                LabelText(label: 'Actual', text: item.valorNuevo),
+                LabelText(label: 'Actual', text: item.valorNuevo, color: AppColors.buttonPrimary,),
               ],
             ),
           ],

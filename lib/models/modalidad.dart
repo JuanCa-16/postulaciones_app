@@ -13,4 +13,17 @@ enum Modalidad {
         return 'PRESENCIAL';
     }
   }
+
+  factory Modalidad.fromJson(String valor) {
+    switch (valor) {
+      case 'REMOTO':
+        return Modalidad.REMOTO;
+      case 'HIBRIDO':
+        return Modalidad.HIBRIDO;
+      case 'PRESENCIAL':
+        return Modalidad.PRESENCIAL;
+      default:
+        throw FormatException('Modalidad desconocida: $valor');
+    }
+  }
 }
