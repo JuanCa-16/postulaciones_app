@@ -9,6 +9,7 @@ class InputField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
+  final void Function(String?)? onChanged;
   final void Function(String)? onFieldSubmitted;
   final FocusNode? focusNode;
 
@@ -21,6 +22,7 @@ class InputField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.onSaved,
+    this.onChanged,
     this.onFieldSubmitted,
     this.focusNode,
   });
@@ -44,6 +46,7 @@ class InputField extends StatelessWidget {
           obscureText: obscureText,
           validator: validator,
           onSaved: onSaved,
+          onChanged: onChanged,
           onFieldSubmitted: onFieldSubmitted,
           autovalidateMode: AutovalidateMode.onUserInteraction,
 

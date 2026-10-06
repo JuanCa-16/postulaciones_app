@@ -42,11 +42,18 @@ class _PostulacionFormState extends State<PostulacionForm> {
   void initState() {
     super.initState();
 
-    modalidad = modalidad =
-        widget.datosIniciales?.modalidad ?? Modalidad.REMOTO;
-    estadoId =
-        widget.datosIniciales?.estadoId ??
-        widget.estados.firstWhere((estado) => estado.porDefecto).id;
+    modalidad = widget.datosIniciales?.modalidad ?? Modalidad.REMOTO;
+
+    if (widget.datosIniciales != null) {
+      estadoId = widget.datosIniciales!.estadoId;
+    } else if (widget.estados.isNotEmpty) {
+      estadoId = widget.estados
+          .firstWhere(
+            (estado) => estado.porDefecto,
+            orElse: () => widget.estados.first,
+          )
+          .id;
+    }
   }
 
   @override
@@ -60,6 +67,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
 
   Future<void> _guardar() async {
     if (!_formKey.currentState!.validate()) return;
+    if (estadoId == null) return;
 
     _formKey.currentState!.save();
 
@@ -92,6 +100,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
           children: [
             InputField(
               label: 'Nombre de la oferta *',
+              placeholder: "Frontend Developer",
               initialValue: datos?.nombreOferta,
               keyboardType: TextInputType.text,
               validator: (value) {
@@ -113,6 +122,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
 
             InputField(
               label: 'Empresa ',
+              placeholder: "Google",
               initialValue: datos?.nombreEmpresa,
               keyboardType: TextInputType.text,
               focusNode: _empresaFocus,
@@ -131,6 +141,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                 Expanded(
                   child: InputField(
                     label: 'URL de la oferta',
+                    placeholder: "https://...",
                     initialValue: datos?.url,
                     keyboardType: TextInputType.url,
                     focusNode: _urlFocus,
@@ -146,6 +157,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                 Expanded(
                   child: InputField(
                     label: 'Plataforma / Portal',
+                    placeholder: "LinkedIn",
                     initialValue: datos?.paginaAplicacion,
                     keyboardType: TextInputType.text,
                     focusNode: _paginaAplicacionFocus,
@@ -177,15 +189,29 @@ class _PostulacionFormState extends State<PostulacionForm> {
                       nombreModalidad(modalidadItem),
                       style: TextStyle(
                         color: modalidad == modalidadItem
-                            ? Colors.white
+                            ? AppColors.buttonPrimary
                             : AppColors.textSecondary,
                       ),
                     ),
                     selected: modalidad == modalidadItem,
                     showCheckmark: false,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(
+                        color: modalidad == modalidadItem
+                            ? AppColors.buttonPrimary
+                            : AppColors.inputFocusedBorder,
+                        width: 1,
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 2),
                     color: WidgetStateColor.resolveWith((states) {
                       if (states.contains(WidgetState.selected)) {
-                        return AppColors.buttonPrimary;
+                        return AppColors.buttonPrimary.withValues(alpha: 0.15);
                       }
 
                       return AppColors.inputBackground;
@@ -248,10 +274,20 @@ class _PostulacionFormState extends State<PostulacionForm> {
 
                       return AppColors.inputBackground;
                     }),
-                    side: BorderSide(
-                      color: AppColors.inputFocusedBorder,
-                      width: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(
+                        color: estadoId == estado.id
+                            ? estado.colorParsed
+                            : AppColors.inputFocusedBorder,
+                        width: 1,
+                      ),
                     ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 2),
                     onSelected: (_) {
                       setState(() => estadoId = estado.id);
                     },

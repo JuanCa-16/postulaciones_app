@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:postulaciones_app/models/estado.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/screens/crear_postulacion.dart';
+import 'package:postulaciones_app/services/estado_service.dart';
 import 'package:postulaciones_app/services/postulacion_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
+import 'package:postulaciones_app/widgets/dashed_line.dart';
+import 'package:postulaciones_app/widgets/input_field.dart';
 import 'package:postulaciones_app/widgets/loading_overlay.dart';
 import 'package:postulaciones_app/widgets/postulacion_card.dart';
 import 'package:postulaciones_app/screens/detalles_postulacion.dart';
@@ -18,15 +22,20 @@ class Inicio extends StatefulWidget {
 
 class _InicioState extends State<Inicio> {
   final PostulacionService _postulacionService = PostulacionService();
+  final EstadoService _estadoService = EstadoService();
   int? postulacionExpandida;
   List<Postulacion> postulaciones = [];
+  List<Estado> estados = [];
+  Set<int> estadosSeleccionados = {};
   bool cargando = true;
   String? error;
+  String busqueda = '';
 
   @override
   void initState() {
     super.initState();
     _cargarPostulaciones();
+    _cargarEstados();
   }
 
   Future<void> _cargarPostulaciones() async {
@@ -56,103 +65,260 @@ class _InicioState extends State<Inicio> {
     }
   }
 
+  Future<void> _cargarEstados() async {
+    try {
+      final resultado = await _estadoService.obtenerEstados();
+
+      if (!mounted) return;
+
+      setState(() {
+        estados = resultado;
+      });
+    } catch (e) {
+      if (!mounted) return;
+    }
+  }
+
+  List<Postulacion> get postulacionesFiltradas {
+    final texto = busqueda.toLowerCase().trim();
+
+    return postulaciones.where((postulacion) {
+      final oferta = postulacion.nombreOferta.toLowerCase();
+      final empresa = postulacion.nombreEmpresa?.toLowerCase() ?? '';
+
+      final coincideTexto =
+          texto.isEmpty || oferta.contains(texto) || empresa.contains(texto);
+
+      final coincideEstado =
+          estadosSeleccionados.isEmpty ||
+          estadosSeleccionados.contains(postulacion.estado.id);
+
+      return coincideTexto && coincideEstado;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
       loading: cargando,
-      child: Scaffold(
-        appBar: AppBar(title: const Text('MIS POSTULACIONES')),
-        body: error != null
-            ? Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'No se pudieron cargar las postulaciones',
-                        style: Theme.of(context).textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(error!, textAlign: TextAlign.center),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: _cargarPostulaciones,
-                        child: const Text('Reintentar'),
-                      ),
-                    ],
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: Scaffold(
+          appBar: AppBar(title: const Text('MIS POSTULACIONES')),
+          body: error != null
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'No se pudieron cargar las postulaciones',
+                          style: Theme.of(context).textTheme.titleMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(error!, textAlign: TextAlign.center),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _cargarPostulaciones,
+                          child: const Text('Reintentar'),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )
-            : SlidableAutoCloseBehavior(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: postulaciones.length,
-                  itemBuilder: (context, index) {
-                    final postulacion = postulaciones[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 12,
-                      ), // Espaciado vertical entre tarjetas
-                      child: PostulacionCard(
-                        key: ValueKey(postulacion.id),
-                        postulacion: postulacion,
-                        expandido: postulacionExpandida == postulacion.id,
-                        onTap: () {
-                          setState(() {
-                            postulacionExpandida =
-                                postulacionExpandida == postulacion.id
-                                ? null
-                                : postulacion.id;
-                          });
-                        },
-                        onDetalles: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetallesPostulacion(postulacion: postulacion),
-                            ),
-                          );
-
-                          if (!mounted) return;
-
-                          await _cargarPostulaciones();
-                        },
-                        onEliminar: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ConfirmDialog(
-                                title: 'Eliminar postulación',
-                                message:
-                                    '¿Estás seguro de que deseas eliminar esta postulación?',
-                                confirmText: 'Eliminar',
-                                onConfirm: () {
-                                  // Lógica para eliminar postulación
-                                },
-                              );
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InputField(
+                            label: 'Buscar postulación',
+                            placeholder: 'Ej. Frontend Developer, Google...',
+                            keyboardType: TextInputType.text,
+                            onChanged: (valor) {
+                              setState(() {
+                                busqueda = valor ?? '';
+                              });
                             },
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: AppColors.buttonPrimary,
-          onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CrearPostulacion()),
-            );
+                          ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Wrap(
+                              spacing: 8,
+                              alignment: WrapAlignment.start,
+                              children: estados.map((estado) {
+                                return ChoiceChip(
+                                  label: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              estadosSeleccionados.contains(
+                                                estado.id,
+                                              )
+                                              ? Colors.white
+                                              : estado.colorParsed,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        estado.nombre,
+                                        style: TextStyle(
+                                          color:
+                                              estadosSeleccionados.contains(
+                                                estado.id,
+                                              )
+                                              ? Colors.white
+                                              : AppColors.textSecondary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  selected: estadosSeleccionados.contains(
+                                    estado.id,
+                                  ),
+                                  showCheckmark: false,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    side: BorderSide(
+                                      color:
+                                          estadosSeleccionados.contains(
+                                            estado.id,
+                                          )
+                                          ? estado.colorParsed
+                                          : AppColors.inputFocusedBorder,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
+                                  labelPadding: const EdgeInsets.symmetric(
+                                    horizontal: 2,
+                                  ),
+                                  color: WidgetStateColor.resolveWith((states) {
+                                    if (states.contains(WidgetState.selected)) {
+                                      return estado.colorParsed;
+                                    }
 
-            if (!mounted) return;
-            await _cargarPostulaciones();
-          },
-          child: const Icon(Icons.add, color: AppColors.inputBackground),
+                                    return Colors.transparent;
+                                  }),
+
+                                  onSelected: (seleccionado) {
+                                    setState(() {
+                                      if (seleccionado) {
+                                        estadosSeleccionados.add(estado.id);
+                                      } else {
+                                        estadosSeleccionados.remove(estado.id);
+                                      }
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+
+                          DashedLine(
+                            text:
+                                '${postulacionesFiltradas.length} POSTULACIONES',
+                          ),
+
+                          // Aquí podrías agregar un TextField de búsqueda o chips de filtros
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: SlidableAutoCloseBehavior(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: postulacionesFiltradas.length,
+                          itemBuilder: (context, index) {
+                            final postulacion = postulacionesFiltradas[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 12,
+                              ), // Espaciado vertical entre tarjetas
+                              child: PostulacionCard(
+                                key: ValueKey(postulacion.id),
+                                postulacion: postulacion,
+                                expandido:
+                                    postulacionExpandida == postulacion.id,
+                                onTap: () {
+                                  setState(() {
+                                    postulacionExpandida =
+                                        postulacionExpandida == postulacion.id
+                                        ? null
+                                        : postulacion.id;
+                                  });
+                                },
+                                onDetalles: () async {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetallesPostulacion(
+                                        postulacion: postulacion,
+                                      ),
+                                    ),
+                                  );
+
+                                  if (!mounted) return;
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  await _cargarPostulaciones();
+                                },
+                                onEliminar: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return ConfirmDialog(
+                                        title: 'Eliminar postulación',
+                                        message:
+                                            '¿Estás seguro de que deseas eliminar esta postulación?',
+                                        confirmText: 'Eliminar',
+                                        onConfirm: () {
+                                          // Lógica para eliminar postulación
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: AppColors.buttonPrimary,
+            onPressed: () async {
+              FocusManager.instance.primaryFocus?.unfocus();
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CrearPostulacion(),
+                ),
+              );
+
+              if (!mounted) return;
+              FocusManager.instance.primaryFocus?.unfocus();
+              await _cargarPostulaciones();
+            },
+            child: const Icon(Icons.add, color: AppColors.inputBackground),
+          ),
         ),
       ),
     );
