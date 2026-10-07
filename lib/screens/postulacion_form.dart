@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postulaciones_app/constants/app_strings.dart';
 import 'package:postulaciones_app/layouts/card_layout.dart';
 import 'package:postulaciones_app/models/estado.dart';
 import 'package:postulaciones_app/models/modalidad.dart';
@@ -38,11 +39,8 @@ class _PostulacionFormState extends State<PostulacionForm> {
   String url = '';
   String paginaAplicacion = '';
 
-  @override
-  void initState() {
-    super.initState();
-
-    modalidad = widget.datosIniciales?.modalidad ?? Modalidad.REMOTO;
+  void _seleccionarEstadoInicial() {
+    if (estadoId != null) return; // ya hay uno, no lo pises
 
     if (widget.datosIniciales != null) {
       estadoId = widget.datosIniciales!.estadoId;
@@ -57,12 +55,17 @@ class _PostulacionFormState extends State<PostulacionForm> {
   }
 
   @override
-  void dispose() {
-    _empresaFocus.dispose();
-    _urlFocus.dispose();
-    _paginaAplicacionFocus.dispose();
+  void initState() {
+    super.initState();
 
-    super.dispose();
+    modalidad = widget.datosIniciales?.modalidad ?? Modalidad.REMOTO;
+    _seleccionarEstadoInicial();
+  }
+
+  @override
+  void didUpdateWidget(covariant PostulacionForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _seleccionarEstadoInicial();
   }
 
   Future<void> _guardar() async {
@@ -86,52 +89,54 @@ class _PostulacionFormState extends State<PostulacionForm> {
   }
 
   @override
+  void dispose() {
+    _empresaFocus.dispose();
+    _urlFocus.dispose();
+    _paginaAplicacionFocus.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final datos = widget.datosIniciales;
     return CardLayout(
       color: widget.color,
-      title: datos == null ? 'Crear Nueva Postulación' : 'Editar Postulación',
-      description:
-          'Ingresa las características y el estado actual de la oferta',
+      title: datos == null
+          ? AppStrings.crearNuevaPostulacion
+          : AppStrings.editarPostulacion,
+      description: AppStrings.descripcionPostulacion,
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InputField(
-              label: 'Nombre de la oferta *',
-              placeholder: "Frontend Developer",
+              label: AppStrings.nombreOferta,
+              placeholder: AppStrings.placeholderNombreOferta,
               initialValue: datos?.nombreOferta,
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'El nombre de la oferta es obligatorio.';
+                  return AppStrings.valOfertaRequerido;
                 }
 
                 return null;
               },
-              onSaved: (value) {
-                nombreOferta = value ?? '';
-              },
-              onFieldSubmitted: (_) {
-                _empresaFocus.requestFocus();
-              },
+              onSaved: (value) => nombreOferta = value ?? '',
+              onFieldSubmitted: (_) => _empresaFocus.requestFocus(),
             ),
 
             const SizedBox(height: 15),
 
             InputField(
-              label: 'Empresa ',
-              placeholder: "Google",
+              label: AppStrings.empresa,
+              placeholder: AppStrings.placeholderEmpresa,
               initialValue: datos?.nombreEmpresa,
               keyboardType: TextInputType.text,
               focusNode: _empresaFocus,
-              onSaved: (value) {
-                nombreEmpresa = value ?? '';
-              },
-              onFieldSubmitted: (_) {
-                _urlFocus.requestFocus();
-              },
+              onSaved: (value) => nombreEmpresa = value ?? '',
+              onFieldSubmitted: (_) => _urlFocus.requestFocus(),
             ),
 
             const SizedBox(height: 15),
@@ -140,30 +145,26 @@ class _PostulacionFormState extends State<PostulacionForm> {
               children: [
                 Expanded(
                   child: InputField(
-                    label: 'URL de la oferta',
-                    placeholder: "https://...",
+                    label: AppStrings.urlOferta,
+                    placeholder: AppStrings.placeholderUrl,
                     initialValue: datos?.url,
                     keyboardType: TextInputType.url,
                     focusNode: _urlFocus,
-                    onSaved: (value) {
-                      url = value ?? '';
-                    },
-                    onFieldSubmitted: (_) {
-                      _paginaAplicacionFocus.requestFocus();
-                    },
+                    onSaved: (value) => url = value ?? '',
+                    onFieldSubmitted: (_) =>
+                        _paginaAplicacionFocus.requestFocus(),
                   ),
                 ),
+
                 const SizedBox(width: 15),
                 Expanded(
                   child: InputField(
-                    label: 'Plataforma / Portal',
-                    placeholder: "LinkedIn",
+                    label: AppStrings.pagAplicacion,
+                    placeholder: AppStrings.placeholderPlataforma,
                     initialValue: datos?.paginaAplicacion,
                     keyboardType: TextInputType.text,
                     focusNode: _paginaAplicacionFocus,
-                    onSaved: (value) {
-                      paginaAplicacion = value ?? '';
-                    },
+                    onSaved: (value) => paginaAplicacion = value ?? '',
                   ),
                 ),
               ],
@@ -172,7 +173,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
             const SizedBox(height: 15),
 
             Text(
-              'Modalidad *'.toUpperCase(),
+              '${AppStrings.modalidad}*'.toUpperCase(),
               style: Theme.of(context).textTheme.labelMedium,
             ),
 
@@ -217,9 +218,8 @@ class _PostulacionFormState extends State<PostulacionForm> {
                       return AppColors.inputBackground;
                     }),
 
-                    onSelected: (_) {
-                      setState(() => modalidad = modalidadItem);
-                    },
+                    onSelected: (_) =>
+                        setState(() => modalidad = modalidadItem),
                   );
                 }).toList(),
               ),
@@ -228,7 +228,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
             const SizedBox(height: 15),
 
             Text(
-              'Estado actual *'.toUpperCase(),
+              AppStrings.estadoActual.toUpperCase(),
               style: Theme.of(context).textTheme.labelMedium,
             ),
 
@@ -288,9 +288,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                       vertical: 2,
                     ),
                     labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-                    onSelected: (_) {
-                      setState(() => estadoId = estado.id);
-                    },
+                    onSelected: (_) => setState(() => estadoId = estado.id),
                   );
                 }).toList(),
               ),
@@ -312,7 +310,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                 ),
                 onPressed: _guardar,
                 child: Text(
-                  datos == null ? 'Crear postulación' : 'Guardar cambios',
+                  datos == null ? AppStrings.crear : AppStrings.guardar,
                 ),
               ),
             ),
@@ -326,10 +324,10 @@ class _PostulacionFormState extends State<PostulacionForm> {
 String nombreModalidad(Modalidad modalidad) {
   switch (modalidad) {
     case Modalidad.REMOTO:
-      return 'Remoto';
+      return AppStrings.remoto;
     case Modalidad.HIBRIDO:
-      return 'Híbrido';
+      return AppStrings.hibrido;
     case Modalidad.PRESENCIAL:
-      return 'Presencial';
+      return AppStrings.presencial;
   }
 }

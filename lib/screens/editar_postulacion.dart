@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:postulaciones_app/constants/app_strings.dart';
 import 'package:postulaciones_app/models/estado.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/screens/postulacion_form.dart';
 import 'package:postulaciones_app/services/estado_service.dart';
 import 'package:postulaciones_app/services/postulacion_service.dart';
-import 'package:postulaciones_app/widgets/dialog_helper.dart';
+import 'package:postulaciones_app/utils/async_handler.dart';
 import 'package:postulaciones_app/widgets/loading_overlay.dart';
 
 class EditarPostulacion extends StatefulWidget {
@@ -17,9 +18,10 @@ class EditarPostulacion extends StatefulWidget {
 
 class _EditarPostulacionState extends State<EditarPostulacion> {
   final PostulacionService _postulacionService = PostulacionService();
-  bool cargando = false;
   final EstadoService _estadoService = EstadoService();
+
   List<Estado> estados = [];
+  bool cargando = false;
 
   @override
   void initState() {
@@ -28,67 +30,38 @@ class _EditarPostulacionState extends State<EditarPostulacion> {
   }
 
   Future<void> _cargarEstados() async {
-    setState(() {
-      cargando = true;
-    });
-    try {
-      final resultado = await _estadoService.obtenerEstados();
+    await AsyncHandler.ejecutar(
+      context,
+      tituloError: AppStrings.errorCargar,
+      onLoading: (cargando) => setState(() => this.cargando = cargando),
+      accion: () async {
+        final resultado = await _estadoService.obtenerEstados();
 
-      if (!mounted) return;
+        if (!mounted) return;
 
-      setState(() {
-        estados = resultado;
-      });
-    } catch (e) {
-      if (!mounted) return;
-
-      final mensaje = e.toString().replaceFirst('Exception: ', '');
-
-      await DialogHelper.mostrarError(
-        context,
-        mensaje,
-        titulo: 'Error al consultar estados',
-      );
-    } finally {
-      if (mounted) {
         setState(() {
-          cargando = false;
+          estados = resultado;
         });
-      }
-    }
+      },
+    );
   }
 
   Future<void> _editarPostulacion(PostulacionFormulario postulacion) async {
-    setState(() {
-      cargando = true;
-    });
+    await AsyncHandler.ejecutar(
+      context,
+      tituloError: AppStrings.errorEditar,
+      onLoading: (cargando) => setState(() => this.cargando = cargando),
+      accion: () async {
+        final resultado = await _postulacionService.editarPostulacion(
+          widget.postulacion.id,
+          postulacion,
+        );
 
-    try {
-      final resultado = await _postulacionService.editarPostulacion(
-        widget.postulacion.id,
-        postulacion,
-      );
-
-      if (!mounted) return;
-      debugPrint(resultado.toString());
-      Navigator.pop(context);
-    } catch (e) {
-      if (!mounted) return;
-
-      final mensaje = e.toString().replaceFirst('Exception: ', '');
-
-      await DialogHelper.mostrarError(
-        context,
-        mensaje,
-        titulo: 'Error al editar postulación',
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          cargando = false;
-        });
-      }
-    }
+        if (!mounted) return;
+        debugPrint(resultado.toString());
+        Navigator.pop(context);
+      },
+    );
   }
 
   @override
@@ -98,14 +71,12 @@ class _EditarPostulacionState extends State<EditarPostulacion> {
       variant: true,
       color: widget.postulacion.estado.colorParsed,
       child: Scaffold(
-        body: estados.isEmpty
-            ? const SizedBox.shrink()
-            : PostulacionForm(
-                color: widget.postulacion.estado.colorParsed,
-                datosIniciales: widget.postulacion.datosParaFormulario,
-                estados: estados,
-                onSubmit: _editarPostulacion,
-              ),
+        body: PostulacionForm(
+          color: widget.postulacion.estado.colorParsed,
+          datosIniciales: widget.postulacion.datosParaFormulario,
+          estados: estados,
+          onSubmit: _editarPostulacion,
+        ),
       ),
     );
   }

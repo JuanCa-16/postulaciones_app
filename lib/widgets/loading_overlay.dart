@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 
@@ -19,25 +21,37 @@ class LoadingOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        child, // La pantalla de fondo
+        child,
         if (loading)
           variant
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    color: color != null
-                        ? color!.withValues(alpha: 0.15)
-                        : AppColors.buttonPrimary.withValues(alpha: 0.15),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: color ?? AppColors.buttonPrimary,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(
+                      color: color != null
+                          ? color!.withValues(alpha: 0.15)
+                          : AppColors.buttonPrimary.withValues(alpha: 0.15),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 6.0,
+                          color: color ?? AppColors.buttonPrimary,
+                        ),
                       ),
                     ),
                   ),
                 )
-              : Container(
-                  color: color ?? Colors.black54,
-                  child: const Center(child: CircularProgressIndicator()),
+              : ClipRect(
+                  // 2. ClipRect evita que el blur se desborde fuera del contenedor
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 6.0,
+                        color: color ?? AppColors.buttonPrimary,
+                      ),
+                    ),
+                  ),
                 ),
       ],
     );

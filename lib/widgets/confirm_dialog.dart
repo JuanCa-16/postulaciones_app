@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postulaciones_app/constants/app_strings.dart';
 
 class ConfirmDialog extends StatelessWidget {
   final String title;
@@ -10,7 +11,7 @@ class ConfirmDialog extends StatelessWidget {
     super.key,
     required this.title,
     required this.message,
-    this.confirmText = 'Confirmar',
+    this.confirmText = AppStrings.aceptar,
     required this.onConfirm,
   });
 
@@ -21,10 +22,8 @@ class ConfirmDialog extends StatelessWidget {
       content: Text(message),
       actions: [
         TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Cancelar'),
+          onPressed: () => Navigator.pop(context),
+          child: const Text(AppStrings.cancelar),
         ),
         ElevatedButton(
           onPressed: () {

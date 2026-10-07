@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
-  
+
   ApiClient.navigatorKey = navigatorKey;
   // 2. Consultamos el token
   final tokenService = TokenService();
@@ -60,6 +60,9 @@ class MyApp extends StatelessWidget {
             color: AppColors.textSecondary,
             letterSpacing: 0.5,
           ),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: AppColors.buttonPrimary,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
