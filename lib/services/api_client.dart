@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:postulaciones_app/screens/login._screen.dart';
+import 'package:postulaciones_app/screens/login_screen.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 
 class ApiClient {
   final TokenService _tokenService = TokenService();
 
   static GlobalKey<NavigatorState>? navigatorKey;
-  
+
   static bool _redirigiendo = false;
   static void reiniciarRedireccion() => _redirigiendo = false;
 

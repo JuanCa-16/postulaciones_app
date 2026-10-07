@@ -1,15 +1,14 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:postulaciones_app/config/environment.dart';
 import 'package:postulaciones_app/models/api_response.dart';
 import 'package:postulaciones_app/models/user_login.dart';
 import 'package:postulaciones_app/services/api_client.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 
 class AuthService {
-  static const String apiUrl =
-      'https://postulaciones-153a.onrender.com/api/auth';
-
+  final String apiUrl = Environment.authUrl;
   final TokenService _secureStorage = TokenService();
 
   Future<void> login(UserLogin usuario) async {

@@ -1,13 +1,12 @@
 import 'dart:convert';
 
+import 'package:postulaciones_app/config/environment.dart';
 import 'package:postulaciones_app/models/api_response.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/services/api_client.dart';
 
 class PostulacionService {
-  static const String apiUrl =
-      'https://postulaciones-153a.onrender.com/api/postulaciones';
-
+  final String apiUrl = Environment.postulacionesUrl;
   final ApiClient _apiClient = ApiClient();
 
   Future<List<Postulacion>> obtenerPostulaciones() async {

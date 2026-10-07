@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:postulaciones_app/screens/inicio.dart';
-import 'package:postulaciones_app/screens/login._screen.dart';
+import 'package:postulaciones_app/screens/login_screen.dart';
 import 'package:postulaciones_app/services/api_client.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   // 1. Aseguramos que los bindings estén listos
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: ".env");
+  
   ApiClient.navigatorKey = navigatorKey;
   // 2. Consultamos el token
   final tokenService = TokenService();
