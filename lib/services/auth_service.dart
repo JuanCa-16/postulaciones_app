@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:postulaciones_app/models/api_response.dart';
 import 'package:postulaciones_app/models/user_login.dart';
+import 'package:postulaciones_app/services/api_client.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 
 class AuthService {
@@ -30,6 +31,7 @@ class AuthService {
     );
 
     await _secureStorage.guardarToken(apiResponse.data.token);
+    ApiClient.reiniciarRedireccion();
   }
 
   Future<String?> obtenerToken() async {

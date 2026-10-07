@@ -3,8 +3,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:postulaciones_app/models/estado.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/screens/crear_postulacion.dart';
+import 'package:postulaciones_app/screens/login._screen.dart';
 import 'package:postulaciones_app/services/estado_service.dart';
 import 'package:postulaciones_app/services/postulacion_service.dart';
+import 'package:postulaciones_app/services/token_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
 import 'package:postulaciones_app/widgets/input_field.dart';
@@ -23,6 +25,7 @@ class Inicio extends StatefulWidget {
 class _InicioState extends State<Inicio> {
   final PostulacionService _postulacionService = PostulacionService();
   final EstadoService _estadoService = EstadoService();
+  final TokenService _tokenService = TokenService();
   int? postulacionExpandida;
   List<Postulacion> postulaciones = [];
   List<Estado> estados = [];
@@ -97,6 +100,32 @@ class _InicioState extends State<Inicio> {
     }).toList();
   }
 
+  void _confirmarCerrarSesion() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmDialog(
+          title: 'Cerrar sesión',
+          message: '¿Estás seguro de que deseas cerrar sesión?',
+          confirmText: 'Cerrar sesión',
+          onConfirm: _cerrarSesion,
+        );
+      },
+    );
+  }
+
+  Future<void> _cerrarSesion() async {
+    await _tokenService.eliminarToken();
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
@@ -105,7 +134,16 @@ class _InicioState extends State<Inicio> {
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
         child: Scaffold(
-          appBar: AppBar(title: const Text('MIS POSTULACIONES')),
+          appBar: AppBar(
+            title: const Text('MIS POSTULACIONES'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout_rounded),
+                tooltip: 'Cerrar sesión',
+                onPressed: _confirmarCerrarSesion,
+              ),
+            ],
+          ),
           body: error != null
               ? Center(
                   child: Padding(

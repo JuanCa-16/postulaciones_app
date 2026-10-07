@@ -55,7 +55,7 @@ class PostulacionService {
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
 
-    if (response.statusCode != 200 || response.statusCode != 201) {
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(json['message']);
     }
 

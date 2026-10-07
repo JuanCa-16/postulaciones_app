@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:postulaciones_app/screens/inicio.dart';
 import 'package:postulaciones_app/screens/login._screen.dart';
+import 'package:postulaciones_app/services/api_client.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   // 1. Aseguramos que los bindings estén listos
   WidgetsFlutterBinding.ensureInitialized();
-
+  ApiClient.navigatorKey = navigatorKey;
   // 2. Consultamos el token
   final tokenService = TokenService();
   final String? token = await tokenService.obtenerToken();
@@ -27,6 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: const TextTheme(
