@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:postulaciones_app/models/estado.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
+import 'package:postulaciones_app/screens/conf_estados.dart';
 import 'package:postulaciones_app/screens/crear_postulacion.dart';
 import 'package:postulaciones_app/screens/login._screen.dart';
 import 'package:postulaciones_app/services/estado_service.dart';
@@ -9,6 +10,7 @@ import 'package:postulaciones_app/services/postulacion_service.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
+import 'package:postulaciones_app/widgets/dialog_helper.dart';
 import 'package:postulaciones_app/widgets/input_field.dart';
 import 'package:postulaciones_app/widgets/loading_overlay.dart';
 import 'package:postulaciones_app/widgets/postulacion_card.dart';
@@ -65,6 +67,35 @@ class _InicioState extends State<Inicio> {
         cargando = false;
         error = mensaje;
       });
+    }
+  }
+
+  Future<void> _eliminarPostulacion(int id) async {
+    setState(() {
+      cargando = true;
+    });
+
+    try {
+      await _postulacionService.eliminarPostulacion(id);
+
+      if (!mounted) return;
+      await _cargarPostulaciones();
+    } catch (e) {
+      if (!mounted) return;
+
+      final mensaje = e.toString().replaceFirst('Exception: ', '');
+
+      await DialogHelper.mostrarError(
+        context,
+        mensaje,
+        titulo: 'Error al eliminar postulacion',
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          cargando = false;
+        });
+      }
     }
   }
 
@@ -137,6 +168,22 @@ class _InicioState extends State<Inicio> {
           appBar: AppBar(
             title: const Text('MIS POSTULACIONES'),
             actions: [
+              IconButton(
+                icon: const Icon(Icons.settings),
+                tooltip: 'Configuracion Estados',
+                onPressed: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ConfEstados()),
+                  );
+
+                  if (!mounted) return;
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  await _cargarPostulaciones();
+                  await _cargarEstados();
+                },
+              ),
               IconButton(
                 icon: const Icon(Icons.logout_rounded),
                 tooltip: 'Cerrar sesión',
@@ -315,6 +362,7 @@ class _InicioState extends State<Inicio> {
                                   if (!mounted) return;
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   await _cargarPostulaciones();
+                                  await _cargarEstados();
                                 },
                                 onEliminar: () {
                                   showDialog(
@@ -325,9 +373,9 @@ class _InicioState extends State<Inicio> {
                                         message:
                                             '¿Estás seguro de que deseas eliminar esta postulación?',
                                         confirmText: 'Eliminar',
-                                        onConfirm: () {
-                                          // Lógica para eliminar postulación
-                                        },
+                                        onConfirm: () => _eliminarPostulacion(
+                                          postulacion.id,
+                                        ),
                                       );
                                     },
                                   );
@@ -354,6 +402,7 @@ class _InicioState extends State<Inicio> {
               if (!mounted) return;
               FocusManager.instance.primaryFocus?.unfocus();
               await _cargarPostulaciones();
+              await _cargarEstados();
             },
             child: const Icon(Icons.add, color: AppColors.inputBackground),
           ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 
 class InputField extends StatelessWidget {
-  final String label;
+  final String? label;
   final String? initialValue;
   final String placeholder;
   final TextInputType? keyboardType;
@@ -12,10 +12,11 @@ class InputField extends StatelessWidget {
   final void Function(String?)? onChanged;
   final void Function(String)? onFieldSubmitted;
   final FocusNode? focusNode;
+  final int? maxLength;
 
   const InputField({
     super.key,
-    required this.label,
+    this.label,
     this.initialValue,
     this.placeholder = 'Placeholder',
     this.keyboardType,
@@ -25,6 +26,7 @@ class InputField extends StatelessWidget {
     this.onChanged,
     this.onFieldSubmitted,
     this.focusNode,
+    this.maxLength,
   });
 
   @override
@@ -32,24 +34,33 @@ class InputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label.toUpperCase(),
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
+        if (label != null && label!.isNotEmpty) ...[
+          Text(
+            label!.toUpperCase(),
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
 
-        const SizedBox(height: 5),
+          const SizedBox(height: 5),
+        ],
 
         TextFormField(
           initialValue: initialValue,
           focusNode: focusNode,
           keyboardType: keyboardType,
           obscureText: obscureText,
+          maxLength: maxLength,
           validator: validator,
           onSaved: onSaved,
           onChanged: onChanged,
           onFieldSubmitted: onFieldSubmitted,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-
+          buildCounter:
+              (
+                context, {
+                required currentLength,
+                required isFocused,
+                required maxLength, // oculta el contador "0/20"
+              }) => null,
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: const TextStyle(color: AppColors.textSecondary),

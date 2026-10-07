@@ -27,4 +27,44 @@ class EstadoService {
 
     return apiResponse.data;
   }
+
+  Future<void> crearEstado(EstadoFormulario estado) async {
+    final response = await _apiClient.post(apiUrl, body: estado.toJson());
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(json['message']);
+    }
+  }
+
+  Future<Estado> editarEstado(int id, EstadoFormulario estado) async {
+    final response = await _apiClient.patch(
+      '$apiUrl/$id',
+      body: estado.toJson(),
+    );
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+    if (response.statusCode != 200) {
+      throw Exception(json['message']);
+    }
+
+    final apiResponse = ApiResponse.fromJson(
+      json,
+      (data) => Estado.fromJson(data as Map<String, dynamic>),
+    );
+
+    return apiResponse.data;
+  }
+
+  Future<void> eliminarEstado(int id) async {
+    final response = await _apiClient.delete('$apiUrl/$id');
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+    if (response.statusCode != 200) {
+      throw Exception(json['message']);
+    }
+  }
 }

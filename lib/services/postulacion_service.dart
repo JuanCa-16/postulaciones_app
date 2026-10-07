@@ -48,9 +48,7 @@ class PostulacionService {
     return apiResponse.data;
   }
 
-  Future<Postulacion> crearPostulacion(
-    PostulacionFormulario postulacion,
-  ) async {
+  Future<void> crearPostulacion(PostulacionFormulario postulacion) async {
     final response = await _apiClient.post(apiUrl, body: postulacion.toJson());
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -58,13 +56,6 @@ class PostulacionService {
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(json['message']);
     }
-
-    final apiResponse = ApiResponse<Postulacion>.fromJson(
-      json,
-      (data) => Postulacion.fromJson(data as Map<String, dynamic>),
-    );
-
-    return apiResponse.data;
   }
 
   Future<Postulacion> editarPostulacion(
@@ -88,5 +79,15 @@ class PostulacionService {
     );
 
     return apiResponse.data;
+  }
+
+  Future<void> eliminarPostulacion(int id) async {
+    final response = await _apiClient.delete('$apiUrl/$id');
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+    if (response.statusCode != 200) {
+      throw Exception(json['message']);
+    }
   }
 }

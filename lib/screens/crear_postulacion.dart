@@ -63,10 +63,9 @@ class _CrearPostulacionState extends State<CrearPostulacion> {
     });
 
     try {
-      final resultado = await _postulacionService.crearPostulacion(postulacion);
+      await _postulacionService.crearPostulacion(postulacion);
 
       if (!mounted) return;
-      debugPrint(resultado.toString());
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;

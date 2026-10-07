@@ -7,6 +7,7 @@ import 'package:postulaciones_app/screens/editar_postulacion.dart';
 import 'package:postulaciones_app/services/postulacion_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
+import 'package:postulaciones_app/widgets/dialog_helper.dart';
 import 'package:postulaciones_app/widgets/glass_card.dart';
 import 'package:postulaciones_app/widgets/label_text.dart';
 import 'package:postulaciones_app/widgets/loading_overlay.dart';
@@ -62,6 +63,35 @@ class _DetallesPostulacionState extends State<DetallesPostulacion> {
         cargando = false;
         error = mensaje;
       });
+    }
+  }
+
+  Future<void> _eliminarPostulacion(int id) async {
+    setState(() {
+      cargando = true;
+    });
+
+    try {
+      await _postulacionService.eliminarPostulacion(id);
+
+      if (!mounted) return;
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+
+      final mensaje = e.toString().replaceFirst('Exception: ', '');
+
+      await DialogHelper.mostrarError(
+        context,
+        mensaje,
+        titulo: 'Error al eliminar postulacion',
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          cargando = false;
+        });
+      }
     }
   }
 
@@ -200,9 +230,7 @@ class _DetallesPostulacionState extends State<DetallesPostulacion> {
                     message:
                         '¿Estás seguro de que deseas eliminar esta postulación?',
                     confirmText: 'Eliminar',
-                    onConfirm: () {
-                      // Aquí posteriormente eliminaremos la postulación.
-                    },
+                    onConfirm: () => _eliminarPostulacion(postulacion!.id),
                   );
                 },
               );
