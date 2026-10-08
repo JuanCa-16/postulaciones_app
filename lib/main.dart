@@ -37,6 +37,12 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.light(
+          primary: AppColors.mainColor, // botones de texto, cursor, badge, etc.
+          onPrimary: AppColors.background, // texto sobre primary
+          surface: AppColors.background, // fondo de diálogos, sheets, cards
+        ),
         textTheme: const TextTheme(
           titleLarge: TextStyle(
             fontSize: 24,
@@ -62,13 +68,13 @@ class MyApp extends StatelessWidget {
           ),
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: AppColors.buttonPrimary,
+          backgroundColor: AppColors.mainColor,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.buttonPrimary,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+            backgroundColor: AppColors.mainColor,
+            foregroundColor: AppColors.background,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -76,9 +82,9 @@ class MyApp extends StatelessWidget {
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.buttonSecondary,
+            foregroundColor: AppColors.mainColor,
             padding: const EdgeInsets.symmetric(vertical: 10),
-            side: const BorderSide(color: AppColors.buttonSecondary),
+            side: const BorderSide(color: AppColors.mainColor),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),

@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:postulaciones_app/constants/app_strings.dart';
 import 'package:postulaciones_app/models/modalidad.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
+import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/widgets/icon_text.dart';
 import 'package:postulaciones_app/widgets/status_tag.dart';
 
@@ -41,17 +42,17 @@ class PostulacionCard extends StatelessWidget {
           CustomSlidableAction(
             onPressed: (context) => onDetalles?.call(),
             backgroundColor: Colors.transparent,
-            foregroundColor: Colors.blue,
+            foregroundColor: AppColors.mainColor,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
-                color: Colors.blue.withValues(alpha: 0.15),
+                color: AppColors.mainColor.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: const Center(
                 child: Icon(
                   Icons.manage_history_rounded,
-                  color: Colors.blue,
+                  color: AppColors.mainColor,
                   size: 22,
                 ),
               ),
@@ -61,15 +62,15 @@ class PostulacionCard extends StatelessWidget {
           CustomSlidableAction(
             onPressed: (context) => onEliminar?.call(),
             backgroundColor: Colors.transparent,
-            foregroundColor: Colors.red,
+            foregroundColor: AppColors.danger,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.15),
+                color: AppColors.danger.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: const Center(
-                child: Icon(Icons.delete, color: Colors.red, size: 22),
+                child: Icon(Icons.delete, color: AppColors.danger, size: 22),
               ),
             ),
           ),

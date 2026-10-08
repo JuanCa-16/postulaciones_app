@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:postulaciones_app/theme/app_colors.dart';
 
 class BackgroundTop extends StatelessWidget {
   final Color statusColor;
@@ -20,7 +21,7 @@ class BackgroundTop extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           // FONDO BASE
-          const ColoredBox(color: Colors.white),
+          const ColoredBox(color: AppColors.background),
 
           // RECTÁNGULO SUPERIOR
           Align(
@@ -43,9 +44,7 @@ class BackgroundTop extends StatelessWidget {
             child: ClipRect(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 80, sigmaY: 00),
-                child: Container(
-                  color: const Color.fromRGBO(255, 255, 255, 0.4),
-                ),
+                child: Container(color: AppColors.backgroundTransparent),
               ),
             ),
           ),

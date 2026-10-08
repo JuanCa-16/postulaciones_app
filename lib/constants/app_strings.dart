@@ -22,6 +22,8 @@ class AppStrings {
   static const String fecha = 'Fecha postulación';
 
   // === PLACEHOLDERS ===
+  static const String placeholderCorreo = 'ejemplo@correo.com';
+  static const String placeholderClave = 'Ingresa tu contraseña';
   static const String placeholderNombreOferta = 'Frontend Developer';
   static const String placeholderEmpresa = 'Google';
   static const String placeholderUrl = 'https://...';

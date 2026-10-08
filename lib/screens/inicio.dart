@@ -189,7 +189,7 @@ class _InicioState extends State<Inicio> {
                               height: 8,
                               decoration: BoxDecoration(
                                 color: seleccionado
-                                    ? Colors.white
+                                    ? AppColors.background
                                     : estado.colorParsed,
                                 shape: BoxShape.circle,
                               ),
@@ -201,7 +201,7 @@ class _InicioState extends State<Inicio> {
                               estado.nombre,
                               style: TextStyle(
                                 color: seleccionado
-                                    ? Colors.white
+                                    ? AppColors.background
                                     : AppColors.textSecondary,
                               ),
                             ),
@@ -308,7 +308,7 @@ class _InicioState extends State<Inicio> {
                         Badge(
                           isLabelVisible: estadosSeleccionados.isNotEmpty,
                           label: Text('${estadosSeleccionados.length}'),
-                          backgroundColor: AppColors.buttonPrimary,
+                          backgroundColor: AppColors.mainColor,
                           child: IconButton.filledTonal(
                             icon: const Icon(Icons.filter_list_rounded),
                             tooltip: 'Filtrar por estado',

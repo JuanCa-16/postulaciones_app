@@ -31,7 +31,7 @@ class ChipRadio extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: selected ? Colors.white : color,
+              color: selected ? AppColors.background : color,
               shape: BoxShape.circle,
             ),
           ),
@@ -40,7 +40,7 @@ class ChipRadio extends StatelessWidget {
             label,
             style: TextStyle(
               fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-              color: selected ? Colors.white : AppColors.textSecondary,
+              color: selected ? AppColors.background : AppColors.textSecondary,
             ),
           ),
         ],

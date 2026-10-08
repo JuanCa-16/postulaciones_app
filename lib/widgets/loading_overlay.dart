@@ -31,11 +31,11 @@ class LoadingOverlay extends StatelessWidget {
                     child: Container(
                       color: color != null
                           ? color!.withValues(alpha: 0.15)
-                          : AppColors.buttonPrimary.withValues(alpha: 0.15),
+                          : AppColors.mainColor.withValues(alpha: 0.15),
                       child: Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 6.0,
-                          color: color ?? AppColors.buttonPrimary,
+                          color: color ?? AppColors.mainColor,
                         ),
                       ),
                     ),
@@ -48,7 +48,7 @@ class LoadingOverlay extends StatelessWidget {
                     child: Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 6.0,
-                        color: color ?? AppColors.buttonPrimary,
+                        color: color ?? AppColors.mainColor,
                       ),
                     ),
                   ),

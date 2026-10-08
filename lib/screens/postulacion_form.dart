@@ -190,7 +190,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                       nombreModalidad(modalidadItem),
                       style: TextStyle(
                         color: modalidad == modalidadItem
-                            ? AppColors.buttonPrimary
+                            ? AppColors.mainColor
                             : AppColors.textSecondary,
                       ),
                     ),
@@ -200,7 +200,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
                         color: modalidad == modalidadItem
-                            ? AppColors.buttonPrimary
+                            ? AppColors.mainColor
                             : AppColors.inputFocusedBorder,
                         width: 1,
                       ),
@@ -212,7 +212,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                     labelPadding: const EdgeInsets.symmetric(horizontal: 2),
                     color: WidgetStateColor.resolveWith((states) {
                       if (states.contains(WidgetState.selected)) {
-                        return AppColors.buttonPrimary.withValues(alpha: 0.15);
+                        return AppColors.mainColor.withValues(alpha: 0.15);
                       }
 
                       return AppColors.inputBackground;
@@ -249,7 +249,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                           height: 8,
                           decoration: BoxDecoration(
                             color: estadoId == estado.id
-                                ? Colors.white
+                                ? AppColors.background
                                 : estado.colorParsed,
                             shape: BoxShape.circle,
                           ),
@@ -259,7 +259,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                           estado.nombre,
                           style: TextStyle(
                             color: estadoId == estado.id
-                                ? Colors.white
+                                ? AppColors.background
                                 : AppColors.textSecondary,
                           ),
                         ),

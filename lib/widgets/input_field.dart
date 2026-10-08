@@ -28,6 +28,12 @@ class InputField extends StatelessWidget {
     this.focusNode,
     this.maxLength,
   });
+  OutlineInputBorder _borde(Color color, double ancho) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: color, width: ancho),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +86,9 @@ class InputField extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: AppColors.inputFocusedBorder,
-                width: 1,
-              ),
-            ),
+            focusedBorder: _borde(AppColors.inputFocusedBorder, 1),
+            errorBorder: _borde(AppColors.mainColor, 1),
+            focusedErrorBorder: _borde(AppColors.mainColor, 1),
           ),
         ),
       ],

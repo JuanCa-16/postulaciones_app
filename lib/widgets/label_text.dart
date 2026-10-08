@@ -46,7 +46,7 @@ class LabelText extends StatelessWidget {
                   child: Text(
                     text,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: color ?? AppColors.buttonPrimary,
+                      color: color ?? AppColors.mainColor,
                     ),
                   ),
                 ),

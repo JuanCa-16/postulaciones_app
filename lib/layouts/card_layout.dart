@@ -20,7 +20,7 @@ class CardLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
-      statusColor: color ?? AppColors.buttonPrimary,
+      statusColor: color ?? AppColors.mainColor,
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 24),
         child: Center(

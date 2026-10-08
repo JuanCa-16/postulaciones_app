@@ -129,7 +129,7 @@ class _EstadoCardState extends State<EstadoCard> {
                   'Defecto',
                   style: TextStyle(
                     color: porDefecto
-                        ? AppColors.buttonPrimary
+                        ? AppColors.mainColor
                         : AppColors.textSecondary,
                   ),
                 ),
@@ -139,7 +139,7 @@ class _EstadoCardState extends State<EstadoCard> {
                   borderRadius: BorderRadius.circular(16),
                   side: BorderSide(
                     color: porDefecto
-                        ? AppColors.buttonPrimary
+                        ? AppColors.mainColor
                         : AppColors.inputFocusedBorder,
                   ),
                 ),
@@ -147,7 +147,7 @@ class _EstadoCardState extends State<EstadoCard> {
                 labelPadding: const EdgeInsets.symmetric(horizontal: 2),
                 color: WidgetStateColor.resolveWith((states) {
                   if (states.contains(WidgetState.selected)) {
-                    return AppColors.buttonPrimary.withValues(alpha: 0.15);
+                    return AppColors.mainColor.withValues(alpha: 0.15);
                   }
                   return AppColors.inputBackground;
                 }),
@@ -185,10 +185,10 @@ class _EstadoCardState extends State<EstadoCard> {
               if (haCambiado && _nombreValido)
                 IconButton(
                   icon: const Icon(Icons.check),
-                  color: Colors.white,
+                  color: AppColors.background,
                   tooltip: AppStrings.guardar,
                   style: IconButton.styleFrom(
-                    backgroundColor: AppColors.buttonPrimary,
+                    backgroundColor: AppColors.mainColor,
                     shape: const CircleBorder(),
                   ),
                   onPressed: () =>
@@ -211,15 +211,15 @@ class _EstadoCardState extends State<EstadoCard> {
           CustomSlidableAction(
             onPressed: (_) => widget.onEliminar?.call(),
             backgroundColor: Colors.transparent,
-            foregroundColor: Colors.red,
+            foregroundColor: AppColors.danger,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.15),
+                color: AppColors.danger.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: const Center(
-                child: Icon(Icons.delete, color: Colors.red, size: 22),
+                child: Icon(Icons.delete, color: AppColors.danger, size: 22),
               ),
             ),
           ),

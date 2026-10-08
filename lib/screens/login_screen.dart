@@ -76,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     label: AppStrings.labelCorreo,
                     keyboardType: TextInputType.emailAddress,
                     focusNode: _correoFocus,
+                    placeholder: AppStrings.placeholderCorreo,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return AppStrings.valCorreoRequerido;
@@ -100,6 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   InputField(
                     label: AppStrings.labelContrasena,
                     focusNode: _contrasenaFocus,
+                    placeholder: AppStrings.placeholderClave,
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {

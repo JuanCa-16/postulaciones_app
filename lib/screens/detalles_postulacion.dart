@@ -208,7 +208,7 @@ class _DetallesPostulacionState extends State<DetallesPostulacion> {
 
           FloatingActionButton(
             heroTag: 'eliminar',
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.danger,
             onPressed: () {
               showDialog(
                 context: context,
