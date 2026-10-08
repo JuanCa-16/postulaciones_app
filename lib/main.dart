@@ -31,66 +31,77 @@ class MyApp extends StatelessWidget {
 
   const MyApp({super.key, required this.isLoggedIn});
 
+  ThemeData _buildTheme(AppColors c, Brightness brightness) {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      extensions: [c],
+      scaffoldBackgroundColor: c.background,
+      colorScheme: ColorScheme(
+        brightness: brightness,
+        primary: c.mainColor,
+        onPrimary: Colors.white,
+        secondary: c.mainColor,
+        onSecondary: Colors.white,
+        error: c.danger,
+        onError: Colors.white,
+        surface: c.background,
+        onSurface: c.textPrimary,
+      ),
+      textTheme: TextTheme(
+        titleLarge: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: c.textPrimary,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: c.textPrimary,
+        ),
+        titleSmall: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: c.textPrimary,
+        ),
+        bodyLarge: TextStyle(fontSize: 16, color: c.textPrimary),
+        bodyMedium: TextStyle(fontSize: 14, color: c.textSecondary),
+        labelMedium: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: c.textSecondary,
+          letterSpacing: 0.5,
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: c.mainColor,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: c.mainColor,
+          foregroundColor: c.background,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: c.mainColor,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          side: BorderSide(color: c.mainColor),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.light(
-          primary: AppColors.mainColor, // botones de texto, cursor, badge, etc.
-          onPrimary: AppColors.background, // texto sobre primary
-          surface: AppColors.background, // fondo de diálogos, sheets, cards
-        ),
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-          titleMedium: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-          titleSmall: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textPrimary,
-          ),
-          bodyLarge: TextStyle(fontSize: 16, color: AppColors.textPrimary),
-          bodyMedium: TextStyle(fontSize: 14, color: AppColors.textSecondary),
-          labelMedium: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
-            letterSpacing: 0.5,
-          ),
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: AppColors.mainColor,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.mainColor,
-            foregroundColor: AppColors.background,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.mainColor,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            side: const BorderSide(color: AppColors.mainColor),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-      ),
+      theme: _buildTheme(AppColors.light, Brightness.light),
+      darkTheme: _buildTheme(AppColors.dark, Brightness.dark),
+      themeMode: ThemeMode.system, // sigue el modo del celular
       home: isLoggedIn ? const Inicio() : const LoginScreen(),
     );
   }

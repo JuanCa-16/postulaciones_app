@@ -33,7 +33,7 @@ class LabelText extends StatelessWidget {
             ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                 decoration: BoxDecoration(
-                  color: AppColors.inputFocusedBorder,
+                  color: context.colors.inputFocusedBorder,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
@@ -46,7 +46,7 @@ class LabelText extends StatelessWidget {
                   child: Text(
                     text,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: color ?? AppColors.mainColor,
+                      color: color ?? context.colors.mainColor,
                     ),
                   ),
                 ),

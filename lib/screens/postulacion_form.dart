@@ -173,7 +173,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
             const SizedBox(height: 15),
 
             Text(
-              '${AppStrings.modalidad}*'.toUpperCase(),
+              '${AppStrings.modalidad} *'.toUpperCase(),
               style: Theme.of(context).textTheme.labelMedium,
             ),
 
@@ -190,8 +190,8 @@ class _PostulacionFormState extends State<PostulacionForm> {
                       nombreModalidad(modalidadItem),
                       style: TextStyle(
                         color: modalidad == modalidadItem
-                            ? AppColors.mainColor
-                            : AppColors.textSecondary,
+                            ? context.colors.mainColor
+                            : context.colors.textSecondary,
                       ),
                     ),
                     selected: modalidad == modalidadItem,
@@ -200,8 +200,8 @@ class _PostulacionFormState extends State<PostulacionForm> {
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
                         color: modalidad == modalidadItem
-                            ? AppColors.mainColor
-                            : AppColors.inputFocusedBorder,
+                            ? context.colors.mainColor
+                            : context.colors.inputFocusedBorder,
                         width: 1,
                       ),
                     ),
@@ -212,10 +212,10 @@ class _PostulacionFormState extends State<PostulacionForm> {
                     labelPadding: const EdgeInsets.symmetric(horizontal: 2),
                     color: WidgetStateColor.resolveWith((states) {
                       if (states.contains(WidgetState.selected)) {
-                        return AppColors.mainColor.withValues(alpha: 0.15);
+                        return context.colors.mainColor.withValues(alpha: 0.15);
                       }
 
-                      return AppColors.inputBackground;
+                      return context.colors.inputBackground;
                     }),
 
                     onSelected: (_) =>
@@ -249,7 +249,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                           height: 8,
                           decoration: BoxDecoration(
                             color: estadoId == estado.id
-                                ? AppColors.background
+                                ? context.colors.background
                                 : estado.colorParsed,
                             shape: BoxShape.circle,
                           ),
@@ -259,8 +259,8 @@ class _PostulacionFormState extends State<PostulacionForm> {
                           estado.nombre,
                           style: TextStyle(
                             color: estadoId == estado.id
-                                ? AppColors.background
-                                : AppColors.textSecondary,
+                                ? context.colors.background
+                                : context.colors.textSecondary,
                           ),
                         ),
                       ],
@@ -272,14 +272,14 @@ class _PostulacionFormState extends State<PostulacionForm> {
                         return estado.colorParsed;
                       }
 
-                      return AppColors.inputBackground;
+                      return context.colors.inputBackground;
                     }),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
                         color: estadoId == estado.id
                             ? estado.colorParsed
-                            : AppColors.inputFocusedBorder,
+                            : context.colors.inputFocusedBorder,
                         width: 1,
                       ),
                     ),

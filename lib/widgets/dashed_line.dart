@@ -8,10 +8,11 @@ class DashedLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = context.colors.textSecondary;
     if (text == null || text!.isEmpty) {
       return CustomPaint(
         size: const Size(double.infinity, 1),
-        painter: _DashedLinePainter(),
+        painter: _DashedLinePainter(color),
       );
     }
 
@@ -20,7 +21,7 @@ class DashedLine extends StatelessWidget {
         Expanded(
           child: CustomPaint(
             size: Size(double.infinity, 1),
-            painter: _DashedLinePainter(),
+            painter: _DashedLinePainter(color),
           ),
         ),
 
@@ -28,8 +29,8 @@ class DashedLine extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Text(
             text!,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: context.colors.textSecondary,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -39,7 +40,7 @@ class DashedLine extends StatelessWidget {
         Expanded(
           child: CustomPaint(
             size: Size(double.infinity, 1),
-            painter: _DashedLinePainter(),
+            painter: _DashedLinePainter(color),
           ),
         ),
       ],
@@ -48,10 +49,13 @@ class DashedLine extends StatelessWidget {
 }
 
 class _DashedLinePainter extends CustomPainter {
+  final Color color;
+
+  _DashedLinePainter(this.color);
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.textSecondary
+      ..color = color
       ..strokeWidth = 1;
 
     const dashWidth = 5.0;

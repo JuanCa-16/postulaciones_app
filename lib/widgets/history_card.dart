@@ -27,7 +27,7 @@ class HistoryCard extends StatelessWidget {
                 ),
                 IconText(
                   icon: Icons.calendar_month,
-                  color: AppColors.textSecondary,
+                  color: context.colors.textSecondary,
                   label: item.fechaFormateada,
                 ),
               ],
@@ -58,7 +58,7 @@ class HistoryCard extends StatelessWidget {
                   child: LabelText(
                     label: AppStrings.actual,
                     text: item.valorNuevo,
-                    color: AppColors.mainColor,
+                    color: context.colors.mainColor,
                   ),
                 ),
               ],

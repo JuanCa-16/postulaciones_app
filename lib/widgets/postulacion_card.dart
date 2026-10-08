@@ -42,17 +42,17 @@ class PostulacionCard extends StatelessWidget {
           CustomSlidableAction(
             onPressed: (context) => onDetalles?.call(),
             backgroundColor: Colors.transparent,
-            foregroundColor: AppColors.mainColor,
+            foregroundColor: context.colors.mainColor,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
-                color: AppColors.mainColor.withValues(alpha: 0.15),
+                color: context.colors.mainColor.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Center(
+              child:  Center(
                 child: Icon(
                   Icons.manage_history_rounded,
-                  color: AppColors.mainColor,
+                  color: context.colors.mainColor,
                   size: 22,
                 ),
               ),
@@ -62,15 +62,15 @@ class PostulacionCard extends StatelessWidget {
           CustomSlidableAction(
             onPressed: (context) => onEliminar?.call(),
             backgroundColor: Colors.transparent,
-            foregroundColor: AppColors.danger,
+            foregroundColor: context.colors.danger,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
-                color: AppColors.danger.withValues(alpha: 0.15),
+                color: context.colors.danger.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Center(
-                child: Icon(Icons.delete, color: AppColors.danger, size: 22),
+              child:  Center(
+                child: Icon(Icons.delete, color: context.colors.danger, size: 22),
               ),
             ),
           ),

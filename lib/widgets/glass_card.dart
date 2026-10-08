@@ -13,12 +13,12 @@ class GlassCard extends StatelessWidget {
       width: MediaQuery.sizeOf(context).width * 0.9,
       constraints: const BoxConstraints(maxWidth: 500),
       decoration: BoxDecoration(
-        color: AppColors.background.withValues(alpha: 0.75),
-        border: Border.all(color: AppColors.inputFocusedBorder),
+        color: context.colors.background.withValues(alpha: 0.75),
+        border: Border.all(color: context.colors.inputFocusedBorder),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        boxShadow:  [
           BoxShadow(
-            color: AppColors.shadow,
+            color: context.colors.shadow,
             blurRadius: 5,
             offset: Offset(0, 5),
           ),

@@ -189,7 +189,7 @@ class _InicioState extends State<Inicio> {
                               height: 8,
                               decoration: BoxDecoration(
                                 color: seleccionado
-                                    ? AppColors.background
+                                    ? context.colors.background
                                     : estado.colorParsed,
                                 shape: BoxShape.circle,
                               ),
@@ -201,8 +201,8 @@ class _InicioState extends State<Inicio> {
                               estado.nombre,
                               style: TextStyle(
                                 color: seleccionado
-                                    ? AppColors.background
-                                    : AppColors.textSecondary,
+                                    ? context.colors.background
+                                    : context.colors.textSecondary,
                               ),
                             ),
                           ],
@@ -214,7 +214,7 @@ class _InicioState extends State<Inicio> {
                           side: BorderSide(
                             color: seleccionado
                                 ? estado.colorParsed
-                                : AppColors.inputFocusedBorder,
+                                : context.colors.inputFocusedBorder,
                             width: 1,
                           ),
                         ),
@@ -307,17 +307,22 @@ class _InicioState extends State<Inicio> {
                         const SizedBox(width: 8),
                         Badge(
                           isLabelVisible: estadosSeleccionados.isNotEmpty,
-                          label: Text('${estadosSeleccionados.length}'),
-                          backgroundColor: AppColors.mainColor,
+                          label: Text(
+                            '${estadosSeleccionados.length}',
+                            style: TextStyle(color: context.colors.background),
+                          ),
+                          backgroundColor: context.colors.mainColor,
                           child: IconButton.filledTonal(
                             icon: const Icon(Icons.filter_list_rounded),
                             tooltip: 'Filtrar por estado',
                             onPressed: _abrirFiltros,
                             style: IconButton.styleFrom(
-                              backgroundColor: AppColors
+                              backgroundColor: context
+                                  .colors
                                   .inputBackground, // fondo del círculo
-                              foregroundColor:
-                                  AppColors.textSecondary, // color del ícono
+                              foregroundColor: context
+                                  .colors
+                                  .textSecondary, // color del ícono
                               // borde (opcional)
                             ),
                           ),
@@ -410,7 +415,11 @@ class _InicioState extends State<Inicio> {
               await _cargarPostulaciones();
               await _cargarEstados();
             },
-            child: const Icon(Icons.add, color: AppColors.inputBackground),
+            child: Icon(
+              Icons.add,
+              color: context.colors.background,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),

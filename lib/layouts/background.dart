@@ -22,7 +22,7 @@ class Background extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               //FONDO BASE
-              const ColoredBox(color: AppColors.background),
+              ColoredBox(color: context.colors.background),
 
               //ESFERA SUPERIOR IZQ
               Positioned(top: -15, left: -15, child: _buildSphere(sphereSize)),
@@ -39,7 +39,9 @@ class Background extends StatelessWidget {
                 child: ClipRect(
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                    child: Container(color: AppColors.backgroundTransparent),
+                    child: Container(
+                      color: context.colors.backgroundTransparent,
+                    ),
                   ),
                 ),
               ),

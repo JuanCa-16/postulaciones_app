@@ -30,7 +30,7 @@ class Timeline extends StatelessWidget {
                       bottom: 0,
                       child: Container(
                         width: 2,
-                        color: AppColors.inputFocusedBorder,
+                        color: context.colors.inputFocusedBorder,
                       ),
                     ),
 

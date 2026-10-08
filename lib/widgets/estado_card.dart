@@ -119,7 +119,9 @@ class _EstadoCardState extends State<EstadoCard> {
                   decoration: BoxDecoration(
                     color: color,
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.inputFocusedBorder),
+                    border: Border.all(
+                      color: context.colors.inputFocusedBorder,
+                    ),
                   ),
                 ),
               ),
@@ -129,8 +131,8 @@ class _EstadoCardState extends State<EstadoCard> {
                   'Defecto',
                   style: TextStyle(
                     color: porDefecto
-                        ? AppColors.mainColor
-                        : AppColors.textSecondary,
+                        ? context.colors.mainColor
+                        : context.colors.textSecondary,
                   ),
                 ),
                 selected: porDefecto,
@@ -139,17 +141,17 @@ class _EstadoCardState extends State<EstadoCard> {
                   borderRadius: BorderRadius.circular(16),
                   side: BorderSide(
                     color: porDefecto
-                        ? AppColors.mainColor
-                        : AppColors.inputFocusedBorder,
+                        ? context.colors.mainColor
+                        : context.colors.inputFocusedBorder,
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 labelPadding: const EdgeInsets.symmetric(horizontal: 2),
                 color: WidgetStateColor.resolveWith((states) {
                   if (states.contains(WidgetState.selected)) {
-                    return AppColors.mainColor.withValues(alpha: 0.15);
+                    return context.colors.mainColor.withValues(alpha: 0.15);
                   }
-                  return AppColors.inputBackground;
+                  return context.colors.inputBackground;
                 }),
                 onSelected: (v) => setState(() => porDefecto = v),
               ),
@@ -185,10 +187,10 @@ class _EstadoCardState extends State<EstadoCard> {
               if (haCambiado && _nombreValido)
                 IconButton(
                   icon: const Icon(Icons.check),
-                  color: AppColors.background,
+                  color: context.colors.background,
                   tooltip: AppStrings.guardar,
                   style: IconButton.styleFrom(
-                    backgroundColor: AppColors.mainColor,
+                    backgroundColor: context.colors.mainColor,
                     shape: const CircleBorder(),
                   ),
                   onPressed: () =>
@@ -211,15 +213,19 @@ class _EstadoCardState extends State<EstadoCard> {
           CustomSlidableAction(
             onPressed: (_) => widget.onEliminar?.call(),
             backgroundColor: Colors.transparent,
-            foregroundColor: AppColors.danger,
+            foregroundColor: context.colors.danger,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
-                color: AppColors.danger.withValues(alpha: 0.15),
+                color: context.colors.danger.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Center(
-                child: Icon(Icons.delete, color: AppColors.danger, size: 22),
+              child: Center(
+                child: Icon(
+                  Icons.delete,
+                  color: context.colors.danger,
+                  size: 22,
+                ),
               ),
             ),
           ),

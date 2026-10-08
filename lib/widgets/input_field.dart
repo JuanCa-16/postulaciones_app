@@ -69,14 +69,14 @@ class InputField extends StatelessWidget {
               }) => null,
           decoration: InputDecoration(
             hintText: placeholder,
-            hintStyle: const TextStyle(color: AppColors.textSecondary),
+            hintStyle: TextStyle(color: context.colors.textSecondary),
             filled: true,
             fillColor: WidgetStateColor.resolveWith((states) {
               if (states.contains(WidgetState.focused)) {
                 return Colors.transparent;
               }
 
-              return AppColors.inputBackground;
+              return context.colors.inputBackground;
             }),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
@@ -86,9 +86,9 @@ class InputField extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
             ),
-            focusedBorder: _borde(AppColors.inputFocusedBorder, 1),
-            errorBorder: _borde(AppColors.mainColor, 1),
-            focusedErrorBorder: _borde(AppColors.mainColor, 1),
+            focusedBorder: _borde(context.colors.inputFocusedBorder, 1),
+            errorBorder: _borde(context.colors.mainColor, 1),
+            focusedErrorBorder: _borde(context.colors.mainColor, 1),
           ),
         ),
       ],

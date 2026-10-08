@@ -21,7 +21,7 @@ class BackgroundTop extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           // FONDO BASE
-          const ColoredBox(color: AppColors.background),
+          ColoredBox(color: context.colors.background),
 
           // RECTÁNGULO SUPERIOR
           Align(
@@ -44,7 +44,7 @@ class BackgroundTop extends StatelessWidget {
             child: ClipRect(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 80, sigmaY: 00),
-                child: Container(color: AppColors.backgroundTransparent),
+                child: Container(color: context.colors.backgroundTransparent),
               ),
             ),
           ),

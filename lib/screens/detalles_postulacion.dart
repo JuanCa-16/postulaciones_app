@@ -202,13 +202,13 @@ class _DetallesPostulacionState extends State<DetallesPostulacion> {
 
               await _cargarDetalles();
             },
-            child: const Icon(Icons.edit, color: AppColors.inputBackground),
+            child: Icon(Icons.edit, color: context.colors.background),
           ),
           const SizedBox(height: 12),
 
           FloatingActionButton(
             heroTag: 'eliminar',
-            backgroundColor: AppColors.danger,
+            backgroundColor: context.colors.danger,
             onPressed: () {
               showDialog(
                 context: context,
@@ -222,7 +222,7 @@ class _DetallesPostulacionState extends State<DetallesPostulacion> {
                 },
               );
             },
-            child: const Icon(Icons.delete, color: AppColors.inputBackground),
+            child: Icon(Icons.delete, color: context.colors.background),
           ),
         ],
       ),
