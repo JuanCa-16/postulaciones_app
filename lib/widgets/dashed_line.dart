@@ -8,7 +8,6 @@ class DashedLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Si no hay texto, mantenemos tu comportamiento original de línea completa
     if (text == null || text!.isEmpty) {
       return CustomPaint(
         size: const Size(double.infinity, 1),
@@ -16,10 +15,8 @@ class DashedLine extends StatelessWidget {
       );
     }
 
-    // Si hay texto, usamos una Row para poner línea - texto - línea
     return Row(
       children: [
-        // Línea izquierda (ocupa el espacio disponible)
         Expanded(
           child: CustomPaint(
             size: Size(double.infinity, 1),
@@ -27,20 +24,18 @@ class DashedLine extends StatelessWidget {
           ),
         ),
 
-        // Texto en el centro con un pequeño padding a los lados
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Text(
             text!,
             style: const TextStyle(
-              color: AppColors.textSecondary, 
+              color: AppColors.textSecondary,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
 
-        // Línea derecha (ocupa el espacio disponible)
         Expanded(
           child: CustomPaint(
             size: Size(double.infinity, 1),

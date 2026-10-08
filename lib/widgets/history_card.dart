@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postulaciones_app/constants/app_strings.dart';
 import 'package:postulaciones_app/models/historial.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/widgets/glass_card.dart';
@@ -36,8 +37,8 @@ class HistoryCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: LabelText(
-                    label: 'Anterior',
-                    text: item.valorAntiguo ?? 'N/A',
+                    label: AppStrings.antes,
+                    text: item.valorAntiguo ?? AppStrings.sinDato,
                   ),
                 ),
 
@@ -55,7 +56,7 @@ class HistoryCard extends StatelessWidget {
 
                 Expanded(
                   child: LabelText(
-                    label: 'Actual',
+                    label: AppStrings.actual,
                     text: item.valorNuevo,
                     color: AppColors.buttonPrimary,
                   ),

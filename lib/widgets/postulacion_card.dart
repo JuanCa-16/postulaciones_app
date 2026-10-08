@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:postulaciones_app/constants/app_strings.dart';
 import 'package:postulaciones_app/models/modalidad.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/widgets/icon_text.dart';
@@ -210,12 +211,12 @@ class PostulacionCard extends StatelessWidget {
                                               InkWell(
                                                 onTap: postulacion.abrirUrl,
                                                 child: IconText(
-                                                  icon: Icons.link_rounded,
+                                                  icon: Icons.link,
                                                   iconSize: 24.0,
                                                   color: postulacion
                                                       .estado
                                                       .colorParsed,
-                                                  label: 'Ver oferta',
+                                                  label: AppStrings.enlace,
                                                 ),
                                               ),
 

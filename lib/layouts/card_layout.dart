@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:postulaciones_app/layouts/background.dart';
+import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/widgets/glass_card.dart';
 
 class CardLayout extends StatelessWidget {
@@ -19,7 +20,7 @@ class CardLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
-      statusColor: color ?? Colors.deepPurple,
+      statusColor: color ?? AppColors.buttonPrimary,
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 24),
         child: Center(

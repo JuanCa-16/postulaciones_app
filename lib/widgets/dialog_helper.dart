@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postulaciones_app/constants/app_strings.dart';
 
 class DialogHelper {
   static Future<void> mostrarError(
@@ -17,7 +18,7 @@ class DialogHelper {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Aceptar'),
+              child: const Text(AppStrings.aceptar),
             ),
           ],
         );

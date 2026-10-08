@@ -26,6 +26,8 @@ class AppStrings {
   static const String placeholderEmpresa = 'Google';
   static const String placeholderUrl = 'https://...';
   static const String placeholderPlataforma = 'LinkedIn';
+    static const String placeholderBuscarPostulacion =
+      'Ej. Frontend Developer, Google...';
 
   // === ERRORES ===
   static const String errorInicioSesion = 'Error al Iniciar Sesión';
@@ -42,8 +44,10 @@ class AppStrings {
   static const String cancelar = 'Cancelar';
   static const String aceptar = 'Aceptar';
   static const String eliminar = 'Eliminar';
+  static const String limpiar = 'Limpiar';
   static const String cerrarSesion = 'Cerrar sesión';
   static const String explorarDemo = 'Explorar Demo';
+  static const String filtroEstado = 'Filtrar por Estado';
 
   // === CONFIRMACIONES ===
   static const String confirmarEliminacion =
@@ -52,10 +56,7 @@ class AppStrings {
       '¿Estás seguro de que deseas cerrar sesión?';
 
   // === INICIO ===
-  static const String misPostulaciones = 'MIS POSTULACIONES';
-  static const String buscarPostulacion = 'Buscar postulación';
-  static const String placeholderBuscarPostulacion =
-      'Ej. Frontend Developer, Google...';
+  static const String misPostulaciones = 'Postulaciones';
   static const String cantPostulaciones = 'POSTULACIONES';
 
   // === POSTULACIÓN ===
@@ -63,9 +64,13 @@ class AppStrings {
   static const String editarPostulacion = 'Editar Postulación';
   static const String descripcionPostulacion =
       'Ingresa las características y el estado actual de la oferta';
+  static const String enlace = 'Enlace';
 
   // === DETALLES POSTULACION ===
   static const String historial = 'Historial de Cambios';
+  static const String antes = 'Anterior';
+  static const String actual = 'Actual';
+  static const String sinDato = 'N/A';
 
   // === ESTADOS ===
   static const String configuracionEstados = 'Configuración de Estados';
@@ -73,6 +78,7 @@ class AppStrings {
       'Gestiona y personaliza las etiquetas de tus postulaciones';
   static const String maximoEstados = 'Max de Estados Creados';
   static const String nuevoEstado = 'Crear nuevo estado';
+  static const String vistaPrevia = 'Vista Previa';
 
   // === MODALIDAD ===
   static const String remoto = 'Remoto';

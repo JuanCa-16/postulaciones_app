@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:postulaciones_app/constants/app_strings.dart';
 import 'package:postulaciones_app/models/estado.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
 import 'package:postulaciones_app/widgets/glass_card.dart';
@@ -169,7 +170,7 @@ class _EstadoCardState extends State<EstadoCard> {
                   child: Row(
                     children: [
                       Text(
-                        'Vista previa:',
+                        AppStrings.vistaPrevia,
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       const SizedBox(width: 8),
@@ -184,8 +185,12 @@ class _EstadoCardState extends State<EstadoCard> {
               if (haCambiado && _nombreValido)
                 IconButton(
                   icon: const Icon(Icons.check),
-                  color: AppColors.buttonPrimary,
-                  tooltip: 'Guardar cambios',
+                  color: Colors.white,
+                  tooltip: AppStrings.guardar,
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppColors.buttonPrimary,
+                    shape: const CircleBorder(),
+                  ),
                   onPressed: () =>
                       widget.onGuardar?.call(nombre.trim(), color, porDefecto),
                 ),

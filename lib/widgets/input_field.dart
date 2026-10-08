@@ -18,7 +18,7 @@ class InputField extends StatelessWidget {
     super.key,
     this.label,
     this.initialValue,
-    this.placeholder = 'Placeholder',
+    this.placeholder = '',
     this.keyboardType,
     this.obscureText = false,
     this.validator,

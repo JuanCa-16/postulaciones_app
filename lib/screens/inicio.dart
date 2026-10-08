@@ -138,6 +138,118 @@ class _InicioState extends State<Inicio> {
     );
   }
 
+  Future<void> _abrirFiltros() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    await showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        // StatefulBuilder: para que los chips se actualicen dentro del sheet
+        return StatefulBuilder(
+          builder: (context, setStateSheet) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        AppStrings.filtroEstado,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const Spacer(),
+                      if (estadosSeleccionados.isNotEmpty)
+                        TextButton(
+                          onPressed: () {
+                            setState(() => estadosSeleccionados.clear());
+                            setStateSheet(() {});
+                          },
+                          child: const Text(AppStrings.limpiar),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: estados.map((estado) {
+                      final seleccionado = estadosSeleccionados.contains(
+                        estado.id,
+                      );
+
+                      return ChoiceChip(
+                        label: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: seleccionado
+                                    ? Colors.white
+                                    : estado.colorParsed,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+
+                            const SizedBox(width: 6),
+
+                            Text(
+                              estado.nombre,
+                              style: TextStyle(
+                                color: seleccionado
+                                    ? Colors.white
+                                    : AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        selected: seleccionado,
+                        showCheckmark: false,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: seleccionado
+                                ? estado.colorParsed
+                                : AppColors.inputFocusedBorder,
+                            width: 1,
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        labelPadding: const EdgeInsets.symmetric(horizontal: 2),
+                        color: WidgetStateColor.resolveWith((states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return estado.colorParsed;
+                          }
+
+                          return Colors.transparent;
+                        }),
+                        onSelected: (v) {
+                          setState(() {
+                            v
+                                ? estadosSeleccionados.add(estado.id)
+                                : estadosSeleccionados.remove(estado.id);
+                          });
+                          setStateSheet(() {}); // refresca el sheet
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
@@ -176,98 +288,43 @@ class _InicioState extends State<Inicio> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InputField(
-                      label: AppStrings.buscarPostulacion,
-                      placeholder: AppStrings.placeholderBuscarPostulacion,
-                      keyboardType: TextInputType.text,
-                      onChanged: (valor) {
-                        setState(() {
-                          busqueda = valor ?? '';
-                        });
-                      },
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: InputField(
+                            placeholder:
+                                AppStrings.placeholderBuscarPostulacion,
+                            keyboardType: TextInputType.text,
+                            onChanged: (valor) =>
+                                setState(() => busqueda = valor ?? ''),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Badge(
+                          isLabelVisible: estadosSeleccionados.isNotEmpty,
+                          label: Text('${estadosSeleccionados.length}'),
+                          backgroundColor: AppColors.buttonPrimary,
+                          child: IconButton.filledTonal(
+                            icon: const Icon(Icons.filter_list_rounded),
+                            tooltip: 'Filtrar por estado',
+                            onPressed: _abrirFiltros,
+                            style: IconButton.styleFrom(
+                              backgroundColor: AppColors
+                                  .inputBackground, // fondo del círculo
+                              foregroundColor:
+                                  AppColors.textSecondary, // color del ícono
+                              // borde (opcional)
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-
-                    const SizedBox(height: 8),
-
-                    SizedBox(
-                      width: double.infinity,
-                      child: Wrap(
-                        spacing: 8,
-                        alignment: WrapAlignment.start,
-                        children: estados.map((estado) {
-                          return ChoiceChip(
-                            label: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        estadosSeleccionados.contains(estado.id)
-                                        ? Colors.white
-                                        : estado.colorParsed,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-
-                                const SizedBox(width: 6),
-
-                                Text(
-                                  estado.nombre,
-                                  style: TextStyle(
-                                    color:
-                                        estadosSeleccionados.contains(estado.id)
-                                        ? Colors.white
-                                        : AppColors.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            selected: estadosSeleccionados.contains(estado.id),
-                            showCheckmark: false,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: BorderSide(
-                                color: estadosSeleccionados.contains(estado.id)
-                                    ? estado.colorParsed
-                                    : AppColors.inputFocusedBorder,
-                                width: 1,
-                              ),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            labelPadding: const EdgeInsets.symmetric(
-                              horizontal: 2,
-                            ),
-                            color: WidgetStateColor.resolveWith((states) {
-                              if (states.contains(WidgetState.selected)) {
-                                return estado.colorParsed;
-                              }
-
-                              return Colors.transparent;
-                            }),
-
-                            onSelected: (seleccionado) {
-                              setState(() {
-                                if (seleccionado) {
-                                  estadosSeleccionados.add(estado.id);
-                                } else {
-                                  estadosSeleccionados.remove(estado.id);
-                                }
-                              });
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ),
-
+                    const SizedBox(height: 16),
                     DashedLine(
                       text:
                           '${postulacionesFiltradas.length} ${AppStrings.cantPostulaciones}',
