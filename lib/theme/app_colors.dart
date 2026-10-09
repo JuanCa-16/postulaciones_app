@@ -38,14 +38,19 @@ class AppColors extends ThemeExtension<AppColors> {
 
   static final dark = AppColors(
     mainColor: aclarar(light.mainColor, 0.15), // más claro para contrastar
-    background: Color.fromRGBO(15, 23, 42, 1),
-    backgroundTransparent: Color.fromRGBO(15, 23, 42, 0.4),
-    shadow: Color.fromRGBO(0, 0, 0, 0.4),
+    background: Color.fromRGBO(8, 13, 28, 1), // azul noche
+    backgroundTransparent: Color.fromRGBO(8, 13, 28, 0.4),
+    shadow: Color.fromRGBO(0, 0, 0, 0.5),
     danger: Color.fromRGBO(239, 83, 80, 1),
-    textPrimary: Color.fromRGBO(241, 245, 249, 1),
-    textSecondary: Color.fromRGBO(148, 163, 184, 1),
-    inputBackground: Color.fromRGBO(30, 41, 59, 0.8),
-    inputFocusedBorder: Color.fromRGBO(71, 85, 105, 1),
+    textPrimary: Color.fromRGBO(241, 245, 249, 1), // slate-100
+    textSecondary: Color.fromRGBO(148, 163, 184, 1), // slate-400
+    inputBackground: Color.fromRGBO(
+      18,
+      27,
+      48,
+      0.8,
+    ), // un escalón arriba del fondo
+    inputFocusedBorder: Color.fromRGBO(51, 65, 85, 1), // slate-700
   );
 
   @override
