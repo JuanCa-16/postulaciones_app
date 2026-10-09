@@ -49,7 +49,7 @@ class PostulacionCard extends StatelessWidget {
                 color: context.colors.mainColor.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child:  Center(
+              child: Center(
                 child: Icon(
                   Icons.manage_history_rounded,
                   color: context.colors.mainColor,
@@ -69,8 +69,12 @@ class PostulacionCard extends StatelessWidget {
                 color: context.colors.danger.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child:  Center(
-                child: Icon(Icons.delete, color: context.colors.danger, size: 22),
+              child: Center(
+                child: Icon(
+                  Icons.delete,
+                  color: context.colors.danger,
+                  size: 22,
+                ),
               ),
             ),
           ),
@@ -176,8 +180,10 @@ class PostulacionCard extends StatelessWidget {
                                           spacing: 8,
                                           runSpacing: 4,
                                           children: [
-                                            if (postulacion.paginaAplicacion !=
-                                                null)
+                                            if (postulacion.paginaAplicacion
+                                                    ?.trim()
+                                                    .isNotEmpty ==
+                                                true)
                                               IconText(
                                                 icon: Icons.work,
                                                 color: postulacion

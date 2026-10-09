@@ -11,6 +11,7 @@ import 'package:postulaciones_app/services/postulacion_service.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/utils/async_handler.dart';
+import 'package:postulaciones_app/widgets/chip_option.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
 import 'package:postulaciones_app/widgets/input_field.dart';
 import 'package:postulaciones_app/widgets/loading_overlay.dart';
@@ -46,11 +47,13 @@ class _InicioState extends State<Inicio> {
     _cargarEstados();
   }
 
-  Future<void> _cargarPostulaciones() async {
+  Future<void> _cargarPostulaciones({bool silencioso = false}) async {
     await AsyncHandler.ejecutar(
       context,
       tituloError: AppStrings.errorCargar,
-      onLoading: (cargando) => setState(() => this.cargando = cargando),
+      onLoading: (cargando) => {
+        if (!silencioso) setState(() => this.cargando = cargando),
+      },
       accion: () async {
         final resultado = await _postulacionService.obtenerPostulaciones();
 
@@ -172,74 +175,34 @@ class _InicioState extends State<Inicio> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: estados.map((estado) {
-                      final seleccionado = estadosSeleccionados.contains(
-                        estado.id,
-                      );
+                  SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      alignment: WrapAlignment.center,
+                      children: estados.map((estado) {
+                        final seleccionado = estadosSeleccionados.contains(
+                          estado.id,
+                        );
 
-                      return ChoiceChip(
-                        label: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: seleccionado
-                                    ? context.colors.background
-                                    : estado.colorParsed,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-
-                            const SizedBox(width: 6),
-
-                            Text(
-                              estado.nombre,
-                              style: TextStyle(
-                                color: seleccionado
-                                    ? context.colors.background
-                                    : context.colors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        selected: seleccionado,
-                        showCheckmark: false,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(
-                            color: seleccionado
-                                ? estado.colorParsed
-                                : context.colors.inputFocusedBorder,
-                            width: 1,
-                          ),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-                        color: WidgetStateColor.resolveWith((states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return estado.colorParsed;
-                          }
-
-                          return Colors.transparent;
-                        }),
-                        onSelected: (v) {
-                          setState(() {
-                            v
-                                ? estadosSeleccionados.add(estado.id)
-                                : estadosSeleccionados.remove(estado.id);
-                          });
-                          setStateSheet(() {}); // refresca el sheet
-                        },
-                      );
-                    }).toList(),
+                        return ChipOption(
+                          label: estado.nombre,
+                          selected: seleccionado,
+                          color: estado.colorParsed,
+                          showDot: true,
+                          unselectedFill: Colors.transparent,
+                          onSelected: (v) {
+                            setState(() {
+                              v
+                                  ? estadosSeleccionados.add(estado.id)
+                                  : estadosSeleccionados.remove(estado.id);
+                            });
+                            setStateSheet(() {});
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),
@@ -340,61 +303,65 @@ class _InicioState extends State<Inicio> {
 
               Expanded(
                 child: SlidableAutoCloseBehavior(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: postulacionesFiltradas.length,
-                    itemBuilder: (context, index) {
-                      final postulacion = postulacionesFiltradas[index];
+                  child: RefreshIndicator(
+                    color: context.colors.mainColor,
+                    onRefresh: () => _cargarPostulaciones(silencioso: true),
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: postulacionesFiltradas.length,
+                      itemBuilder: (context, index) {
+                        final postulacion = postulacionesFiltradas[index];
 
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 12,
-                        ), // Espaciado vertical entre tarjetas
-                        child: PostulacionCard(
-                          key: ValueKey(postulacion.id),
-                          postulacion: postulacion,
-                          expandido: postulacionExpandida == postulacion.id,
-                          onTap: () {
-                            setState(() {
-                              postulacionExpandida =
-                                  postulacionExpandida == postulacion.id
-                                  ? null
-                                  : postulacion.id;
-                            });
-                          },
-                          onDetalles: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetallesPostulacion(
-                                  postulacion: postulacion,
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 12,
+                          ), // Espaciado vertical entre tarjetas
+                          child: PostulacionCard(
+                            key: ValueKey(postulacion.id),
+                            postulacion: postulacion,
+                            expandido: postulacionExpandida == postulacion.id,
+                            onTap: () {
+                              setState(() {
+                                postulacionExpandida =
+                                    postulacionExpandida == postulacion.id
+                                    ? null
+                                    : postulacion.id;
+                              });
+                            },
+                            onDetalles: () async {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetallesPostulacion(
+                                    postulacion: postulacion,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
 
-                            if (!mounted) return;
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            await _cargarPostulaciones();
-                            await _cargarEstados();
-                          },
-                          onEliminar: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return ConfirmDialog(
-                                  title: AppStrings.eliminar,
-                                  message: AppStrings.confirmarEliminacion,
-                                  confirmText: AppStrings.eliminar,
-                                  onConfirm: () =>
-                                      _eliminarPostulacion(postulacion.id),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    },
+                              if (!mounted) return;
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              await _cargarPostulaciones();
+                              await _cargarEstados();
+                            },
+                            onEliminar: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return ConfirmDialog(
+                                    title: AppStrings.eliminar,
+                                    message: AppStrings.confirmarEliminacion,
+                                    confirmText: AppStrings.eliminar,
+                                    onConfirm: () =>
+                                        _eliminarPostulacion(postulacion.id),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

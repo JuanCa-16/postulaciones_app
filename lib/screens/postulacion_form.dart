@@ -4,7 +4,7 @@ import 'package:postulaciones_app/layouts/card_layout.dart';
 import 'package:postulaciones_app/models/estado.dart';
 import 'package:postulaciones_app/models/modalidad.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
-import 'package:postulaciones_app/theme/app_colors.dart';
+import 'package:postulaciones_app/widgets/chip_option.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
 import 'package:postulaciones_app/widgets/input_field.dart';
 
@@ -185,39 +185,9 @@ class _PostulacionFormState extends State<PostulacionForm> {
                 spacing: 8,
                 alignment: WrapAlignment.start,
                 children: Modalidad.values.map((modalidadItem) {
-                  return ChoiceChip(
-                    label: Text(
-                      nombreModalidad(modalidadItem),
-                      style: TextStyle(
-                        color: modalidad == modalidadItem
-                            ? context.colors.mainColor
-                            : context.colors.textSecondary,
-                      ),
-                    ),
+                  return ChipOption(
+                    label: nombreModalidad(modalidadItem),
                     selected: modalidad == modalidadItem,
-                    showCheckmark: false,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: modalidad == modalidadItem
-                            ? context.colors.mainColor
-                            : context.colors.inputFocusedBorder,
-                        width: 1,
-                      ),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
-                    labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-                    color: WidgetStateColor.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return context.colors.mainColor.withValues(alpha: 0.15);
-                      }
-
-                      return context.colors.inputBackground;
-                    }),
-
                     onSelected: (_) =>
                         setState(() => modalidad = modalidadItem),
                   );
@@ -240,54 +210,11 @@ class _PostulacionFormState extends State<PostulacionForm> {
                 spacing: 8,
                 alignment: WrapAlignment.start,
                 children: widget.estados.map((estado) {
-                  return ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: estadoId == estado.id
-                                ? context.colors.background
-                                : estado.colorParsed,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          estado.nombre,
-                          style: TextStyle(
-                            color: estadoId == estado.id
-                                ? context.colors.background
-                                : context.colors.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
+                  return ChipOption(
+                    label: estado.nombre,
                     selected: estadoId == estado.id,
-                    showCheckmark: false,
-                    color: WidgetStateColor.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return estado.colorParsed;
-                      }
-
-                      return context.colors.inputBackground;
-                    }),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: estadoId == estado.id
-                            ? estado.colorParsed
-                            : context.colors.inputFocusedBorder,
-                        width: 1,
-                      ),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
-                    labelPadding: const EdgeInsets.symmetric(horizontal: 2),
+                    color: estado.colorParsed,
+                    showDot: true,
                     onSelected: (_) => setState(() => estadoId = estado.id),
                   );
                 }).toList(),

@@ -3,6 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:postulaciones_app/constants/app_strings.dart';
 import 'package:postulaciones_app/models/estado.dart';
+import 'package:postulaciones_app/widgets/chip_option.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
 import 'package:postulaciones_app/widgets/glass_card.dart';
 import 'package:postulaciones_app/widgets/input_field.dart';
@@ -126,33 +127,9 @@ class _EstadoCardState extends State<EstadoCard> {
                 ),
               ),
               const SizedBox(width: 10),
-              ChoiceChip(
-                label: Text(
-                  'Defecto',
-                  style: TextStyle(
-                    color: porDefecto
-                        ? context.colors.mainColor
-                        : context.colors.textSecondary,
-                  ),
-                ),
+              ChipOption(
+                label: 'Defecto',
                 selected: porDefecto,
-                showCheckmark: false,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(
-                    color: porDefecto
-                        ? context.colors.mainColor
-                        : context.colors.inputFocusedBorder,
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-                color: WidgetStateColor.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return context.colors.mainColor.withValues(alpha: 0.15);
-                  }
-                  return context.colors.inputBackground;
-                }),
                 onSelected: (v) => setState(() => porDefecto = v),
               ),
             ],
