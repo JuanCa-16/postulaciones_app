@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:postulaciones_app/constants/app_strings.dart';
+import 'package:postulaciones_app/models/criterios_busqueda.dart';
 import 'package:postulaciones_app/models/estado.dart';
+import 'package:postulaciones_app/models/modalidad.dart';
 import 'package:postulaciones_app/models/postulacion.dart';
 import 'package:postulaciones_app/screens/conf_estados.dart';
 import 'package:postulaciones_app/screens/crear_postulacion.dart';
@@ -11,8 +13,8 @@ import 'package:postulaciones_app/services/postulacion_service.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:postulaciones_app/utils/async_handler.dart';
-import 'package:postulaciones_app/widgets/chip_option.dart';
 import 'package:postulaciones_app/widgets/dashed_line.dart';
+import 'package:postulaciones_app/widgets/filtros_postulaciones.dart';
 import 'package:postulaciones_app/widgets/input_field.dart';
 import 'package:postulaciones_app/widgets/loading_overlay.dart';
 import 'package:postulaciones_app/widgets/postulacion_card.dart';
@@ -35,10 +37,14 @@ class _InicioState extends State<Inicio> {
   List<Postulacion> postulaciones = [];
 
   List<Estado> estados = [];
+
   Set<int> estadosSeleccionados = {};
+  Set<Modalidad> modalidadesSeleccionadas = {};
+  CriterioBusqueda criterioBusqueda = CriterioBusqueda.TODO;
+
+  String busqueda = '';
 
   bool cargando = true;
-  String busqueda = '';
 
   @override
   void initState() {
@@ -104,15 +110,39 @@ class _InicioState extends State<Inicio> {
     return postulaciones.where((postulacion) {
       final oferta = postulacion.nombreOferta.toLowerCase();
       final empresa = postulacion.nombreEmpresa?.toLowerCase() ?? '';
+      final pagina = postulacion.paginaAplicacion?.toLowerCase() ?? '';
+
+      // 1. Criterio de búsqueda
+      String textoDondeBuscar;
+
+      switch (criterioBusqueda) {
+        case CriterioBusqueda.TODO:
+          textoDondeBuscar = '$oferta $empresa $pagina';
+        case CriterioBusqueda.OFERTA:
+          textoDondeBuscar = oferta;
+        case CriterioBusqueda.EMPRESA:
+          textoDondeBuscar = empresa;
+        case CriterioBusqueda.PAGINA:
+          textoDondeBuscar = pagina;
+      }
+
+      // 2. Buscar todas las palabras
+      final palabras = texto.split(RegExp(r'\s+'));
 
       final coincideTexto =
-          texto.isEmpty || oferta.contains(texto) || empresa.contains(texto);
+          texto.isEmpty ||
+          palabras.every((palabra) => textoDondeBuscar.contains(palabra));
 
       final coincideEstado =
           estadosSeleccionados.isEmpty ||
           estadosSeleccionados.contains(postulacion.estado.id);
 
-      return coincideTexto && coincideEstado;
+      // 4. Filtrar por modalidades
+      final coincideModalidad =
+          modalidadesSeleccionadas.isEmpty ||
+          modalidadesSeleccionadas.contains(postulacion.modalidad);
+
+      return coincideTexto && coincideEstado && coincideModalidad;
     }).toList();
   }
 
@@ -144,73 +174,63 @@ class _InicioState extends State<Inicio> {
   Future<void> _abrirFiltros() async {
     FocusManager.instance.primaryFocus?.unfocus();
 
-    await showModalBottomSheet(
+    await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
+      isScrollControlled: true,
       builder: (context) {
-        // StatefulBuilder: para que los chips se actualicen dentro del sheet
         return StatefulBuilder(
           builder: (context, setStateSheet) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        AppStrings.filtroEstado,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const Spacer(),
-                      if (estadosSeleccionados.isNotEmpty)
-                        TextButton(
-                          onPressed: () {
-                            setState(() => estadosSeleccionados.clear());
-                            setStateSheet(() {});
-                          },
-                          child: const Text(AppStrings.limpiar),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Wrap(
-                      spacing: 8,
-                      runSpacing: 4,
-                      alignment: WrapAlignment.center,
-                      children: estados.map((estado) {
-                        final seleccionado = estadosSeleccionados.contains(
-                          estado.id,
-                        );
+            void actualizarFiltros(VoidCallback accion) {
+              setState(() {
+                accion();
+              });
 
-                        return ChipOption(
-                          label: estado.nombre,
-                          selected: seleccionado,
-                          color: estado.colorParsed,
-                          showDot: true,
-                          unselectedFill: Colors.transparent,
-                          onSelected: (v) {
-                            setState(() {
-                              v
-                                  ? estadosSeleccionados.add(estado.id)
-                                  : estadosSeleccionados.remove(estado.id);
-                            });
-                            setStateSheet(() {});
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
+              setStateSheet(() {});
+            }
+
+            return FiltrosPostulaciones(
+              estados: estados,
+              estadosSeleccionados: estadosSeleccionados,
+              modalidadesSeleccionadas: modalidadesSeleccionadas,
+              criterioBusqueda: criterioBusqueda,
+
+              onEstadosChanged: (seleccionados) {
+                actualizarFiltros(() {
+                  estadosSeleccionados = seleccionados;
+                });
+              },
+
+              onModalidadesChanged: (seleccionadas) {
+                actualizarFiltros(() {
+                  modalidadesSeleccionadas = seleccionadas;
+                });
+              },
+
+              onCriterioChanged: (criterio) {
+                actualizarFiltros(() {
+                  criterioBusqueda = criterio;
+                });
+              },
+
+              onLimpiar: () {
+                actualizarFiltros(() {
+                  estadosSeleccionados.clear();
+                  modalidadesSeleccionadas.clear();
+                  criterioBusqueda = CriterioBusqueda.TODO;
+                });
+              },
             );
           },
         );
       },
     );
+  }
+
+  int get cantidadFiltrosActivos {
+    return estadosSeleccionados.length +
+        modalidadesSeleccionadas.length +
+        (criterioBusqueda != CriterioBusqueda.TODO ? 1 : 0);
   }
 
   @override
@@ -269,9 +289,9 @@ class _InicioState extends State<Inicio> {
                         ),
                         const SizedBox(width: 8),
                         Badge(
-                          isLabelVisible: estadosSeleccionados.isNotEmpty,
+                          isLabelVisible: cantidadFiltrosActivos > 0,
                           label: Text(
-                            '${estadosSeleccionados.length}',
+                            '$cantidadFiltrosActivos',
                             style: TextStyle(color: context.colors.background),
                           ),
                           backgroundColor: context.colors.mainColor,

@@ -186,7 +186,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
                 alignment: WrapAlignment.start,
                 children: Modalidad.values.map((modalidadItem) {
                   return ChipOption(
-                    label: nombreModalidad(modalidadItem),
+                    label: modalidadItem.nombreModalidad,
                     selected: modalidad == modalidadItem,
                     onSelected: (_) =>
                         setState(() => modalidad = modalidadItem),
@@ -245,16 +245,5 @@ class _PostulacionFormState extends State<PostulacionForm> {
         ),
       ),
     );
-  }
-}
-
-String nombreModalidad(Modalidad modalidad) {
-  switch (modalidad) {
-    case Modalidad.REMOTO:
-      return AppStrings.remoto;
-    case Modalidad.HIBRIDO:
-      return AppStrings.hibrido;
-    case Modalidad.PRESENCIAL:
-      return AppStrings.presencial;
   }
 }

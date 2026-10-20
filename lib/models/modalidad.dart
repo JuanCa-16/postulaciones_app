@@ -1,3 +1,5 @@
+import 'package:postulaciones_app/constants/app_strings.dart';
+
 enum Modalidad {
   REMOTO,
   HIBRIDO,
@@ -24,6 +26,17 @@ enum Modalidad {
         return Modalidad.PRESENCIAL;
       default:
         throw FormatException('Modalidad desconocida: $valor');
+    }
+  }
+  
+  String get nombreModalidad {
+    switch (this) {
+      case Modalidad.REMOTO:
+        return AppStrings.remoto;
+      case Modalidad.HIBRIDO:
+        return AppStrings.hibrido;
+      case Modalidad.PRESENCIAL:
+        return AppStrings.presencial;
     }
   }
 }

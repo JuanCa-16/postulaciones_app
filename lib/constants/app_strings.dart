@@ -28,7 +28,7 @@ class AppStrings {
   static const String placeholderEmpresa = 'Google';
   static const String placeholderUrl = 'https://...';
   static const String placeholderPlataforma = 'LinkedIn';
-    static const String placeholderBuscarPostulacion =
+  static const String placeholderBuscarPostulacion =
       'Ej. Frontend Developer, Google...';
 
   // === ERRORES ===
@@ -46,10 +46,9 @@ class AppStrings {
   static const String cancelar = 'Cancelar';
   static const String aceptar = 'Aceptar';
   static const String eliminar = 'Eliminar';
-  static const String limpiar = 'Limpiar';
+  static const String limpiarFiltros = 'Limpiar filtros';
   static const String cerrarSesion = 'Cerrar sesión';
   static const String explorarDemo = 'Explorar Demo';
-  static const String filtroEstado = 'Filtrar por Estado';
 
   // === CONFIRMACIONES ===
   static const String confirmarEliminacion =
@@ -60,6 +59,12 @@ class AppStrings {
   // === INICIO ===
   static const String misPostulaciones = 'Postulaciones';
   static const String cantPostulaciones = 'POSTULACIONES';
+
+  // === FILTROS ===
+  static const String filtros= 'Filtros';
+  static const String filtroBusqueda = 'Funcionamiento del Buscador';
+  static const String filtroEstado = 'Estados';
+  static const String filtroModalidad = 'Modalidad';
 
   // === POSTULACIÓN ===
   static const String crearNuevaPostulacion = 'Crear Nueva Postulación';
