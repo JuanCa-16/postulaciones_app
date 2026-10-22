@@ -20,6 +20,12 @@ class AppStrings {
   static const String modalidad = 'Modalidad';
   static const String estadoActual = 'Estado actual *';
   static const String fecha = 'Fecha postulación';
+  static const String reclutador = 'Reclutador';
+  static const String salario = 'Salario';
+  static const String ubicacion = 'Ubicacion';
+  static const String horario = 'Horario';
+  static const String contrato = 'Contrato';
+  static const String otros = 'Otros';
 
   // === PLACEHOLDERS ===
   static const String placeholderCorreo = 'ejemplo@correo.com';
@@ -38,6 +44,7 @@ class AppStrings {
   static const String errorEliminar = 'Error al Eliminar';
   static const String errorEditar = 'Error al Editar';
   static const String errorCrear = 'Error al Crear';
+  static const String errorGuardar = 'Error al Guardar';
 
   // === ACCIONES ===
   static const String ingresar = 'Ingresar';
@@ -61,7 +68,7 @@ class AppStrings {
   static const String cantPostulaciones = 'POSTULACIONES';
 
   // === FILTROS ===
-  static const String filtros= 'Filtros';
+  static const String filtros = 'Filtros';
   static const String filtroBusqueda = 'Funcionamiento del Buscador';
   static const String filtroEstado = 'Estados';
   static const String filtroModalidad = 'Modalidad';

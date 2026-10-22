@@ -49,8 +49,48 @@ class _InicioState extends State<Inicio> {
   @override
   void initState() {
     super.initState();
-    _cargarPostulaciones();
-    _cargarEstados();
+    _cargarDatosIniciales();
+  }
+
+  Future<void> _cargarDatosIniciales() async {
+    await AsyncHandler.ejecutar(
+      context,
+      tituloError: AppStrings.errorCargar,
+      onLoading: (cargando) => setState(() => this.cargando = cargando),
+      accion: () async {
+        final resultados = await Future.wait([
+          _postulacionService.obtenerPostulaciones(),
+          _estadoService.obtenerEstados(),
+        ]);
+
+        if (!mounted) return;
+
+        final postulacionesCargadas = resultados[0] as List<Postulacion>;
+        final estadosCargados = resultados[1] as List<Estado>;
+
+        setState(() {
+          postulaciones = postulacionesCargadas;
+          estados = estadosCargados;
+        });
+      },
+    );
+  }
+
+  Future<void> _cargarEstados() async {
+    await AsyncHandler.ejecutar(
+      context,
+      tituloError: AppStrings.errorCargar,
+      onLoading: (cargando) => setState(() => this.cargando = cargando),
+      accion: () async {
+        final resultado = await _estadoService.obtenerEstados();
+
+        if (!mounted) return;
+
+        setState(() {
+          estados = resultado;
+        });
+      },
+    );
   }
 
   Future<void> _cargarPostulaciones({bool silencioso = false}) async {
@@ -83,23 +123,6 @@ class _InicioState extends State<Inicio> {
 
         if (!mounted) return;
         await _cargarPostulaciones();
-      },
-    );
-  }
-
-  Future<void> _cargarEstados() async {
-    await AsyncHandler.ejecutar(
-      context,
-      tituloError: AppStrings.errorCargar,
-      onLoading: (cargando) => setState(() => this.cargando = cargando),
-      accion: () async {
-        final resultado = await _estadoService.obtenerEstados();
-
-        if (!mounted) return;
-
-        setState(() {
-          estados = resultado;
-        });
       },
     );
   }

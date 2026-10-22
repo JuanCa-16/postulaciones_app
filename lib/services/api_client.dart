@@ -39,6 +39,16 @@ class ApiClient {
     return _manejarRespuesta(response, token);
   }
 
+  Future<http.Response> put(String url, {Object? body}) async {
+    final token = await _tokenService.obtenerToken();
+    final response = await http.put(
+      Uri.parse(url),
+      headers: _headers(token),
+      body: body != null ? jsonEncode(body) : null,
+    );
+    return _manejarRespuesta(response, token);
+  }
+
   Future<http.Response> delete(String url) async {
     final token = await _tokenService.obtenerToken();
     final response = await http.delete(

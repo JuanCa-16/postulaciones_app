@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
+import 'package:postulaciones_app/widgets/icon_text.dart';
 
 class InputField extends StatelessWidget {
   final String? label;
@@ -13,6 +14,9 @@ class InputField extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final FocusNode? focusNode;
   final int? maxLength;
+  final int? maxLines;
+  final int? minLines;
+  final IconData? icon;
 
   const InputField({
     super.key,
@@ -27,6 +31,9 @@ class InputField extends StatelessWidget {
     this.onFieldSubmitted,
     this.focusNode,
     this.maxLength,
+    this.maxLines = 1,
+    this.minLines,
+    this.icon,
   });
   OutlineInputBorder _borde(Color color, double ancho) {
     return OutlineInputBorder(
@@ -41,10 +48,18 @@ class InputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null && label!.isNotEmpty) ...[
-          Text(
-            label!.toUpperCase(),
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
+          if (icon != null)
+            IconText(
+              icon: icon!,
+              defaultStyle: false,
+              color: context.colors.textSecondary,
+              label: label!.toUpperCase(),
+            )
+          else
+            Text(
+              label!.toUpperCase(),
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
 
           const SizedBox(height: 5),
         ],
@@ -52,14 +67,19 @@ class InputField extends StatelessWidget {
         TextFormField(
           initialValue: initialValue,
           focusNode: focusNode,
-          keyboardType: keyboardType,
+          keyboardType: maxLines == 1 ? keyboardType : TextInputType.multiline,
           obscureText: obscureText,
           maxLength: maxLength,
+          maxLines: maxLines,
+          minLines: minLines,
           validator: validator,
           onSaved: onSaved,
           onChanged: onChanged,
           onFieldSubmitted: onFieldSubmitted,
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          textInputAction: maxLines == 1
+              ? TextInputAction.done
+              : TextInputAction.newline,
           buildCounter:
               (
                 context, {
