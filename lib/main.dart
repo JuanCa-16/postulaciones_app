@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:postulaciones_app/screens/inicio.dart';
 import 'package:postulaciones_app/screens/login_screen.dart';
 import 'package:postulaciones_app/services/api_client.dart';
 import 'package:postulaciones_app/services/token_service.dart';
 import 'package:postulaciones_app/theme/app_colors.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:postulaciones_app/widgets/menu_navegacion.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
       theme: _buildTheme(AppColors.light, Brightness.light),
       darkTheme: _buildTheme(AppColors.dark, Brightness.dark),
       themeMode: ThemeMode.system, // sigue el modo del celular
-      home: isLoggedIn ? const Inicio() : const LoginScreen(),
+      home: isLoggedIn ? const MenuNavegacion() : const LoginScreen(),
     );
   }
 }
