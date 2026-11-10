@@ -25,10 +25,10 @@ class Inicio extends StatefulWidget {
   const Inicio({super.key});
 
   @override
-  State<Inicio> createState() => _InicioState();
+  State<Inicio> createState() => InicioState();
 }
 
-class _InicioState extends State<Inicio> {
+class InicioState extends State<Inicio> {
   final PostulacionService _postulacionService = PostulacionService();
   final EstadoService _estadoService = EstadoService();
   final TokenService _tokenService = TokenService();
@@ -256,6 +256,19 @@ class _InicioState extends State<Inicio> {
         (criterioBusqueda != CriterioBusqueda.TODO ? 1 : 0);
   }
 
+  Future<void> crearPostulacion() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CrearPostulacion()),
+    );
+
+    if (!mounted) return;
+    FocusManager.instance.primaryFocus?.unfocus();
+    await _cargarPostulaciones();
+    await _cargarEstados();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
@@ -350,7 +363,12 @@ class _InicioState extends State<Inicio> {
                     color: context.colors.mainColor,
                     onRefresh: () => _cargarPostulaciones(silencioso: true),
                     child: ListView.builder(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.fromLTRB(
+                        16,
+                        16,
+                        16,
+                        16 + MediaQuery.paddingOf(context).bottom,
+                      ),
                       itemCount: postulacionesFiltradas.length,
                       itemBuilder: (context, index) {
                         final postulacion = postulacionesFiltradas[index];
@@ -409,27 +427,6 @@ class _InicioState extends State<Inicio> {
                 ),
               ),
             ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              FocusManager.instance.primaryFocus?.unfocus();
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CrearPostulacion(),
-                ),
-              );
-
-              if (!mounted) return;
-              FocusManager.instance.primaryFocus?.unfocus();
-              await _cargarPostulaciones();
-              await _cargarEstados();
-            },
-            child: Icon(
-              Icons.add,
-              color: context.colors.background,
-              fontWeight: FontWeight.w600,
-            ),
           ),
         ),
       ),
