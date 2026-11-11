@@ -119,11 +119,11 @@ class _MenuNavegacionState extends State<MenuNavegacion>
             },
             destinations: [
               NavigationDestination(
-                icon: Icon(Icons.work_outline, color: context.colors.textSecondary),
-                selectedIcon: Icon(
-                  Icons.work,
-                  color: context.colors.mainColor,
+                icon: Icon(
+                  Icons.work_outline,
+                  color: context.colors.textSecondary,
                 ),
+                selectedIcon: Icon(Icons.work, color: context.colors.mainColor),
                 label: 'Postulaciones',
               ),
               NavigationDestination(

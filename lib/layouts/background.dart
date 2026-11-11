@@ -6,7 +6,13 @@ import 'package:postulaciones_app/theme/app_colors.dart';
 class Background extends StatelessWidget {
   final Color statusColor;
   final Widget child;
-  const Background({super.key, required this.statusColor, required this.child});
+  final bool safeArea;
+  const Background({
+    super.key,
+    required this.statusColor,
+    required this.child,
+    this.safeArea = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class Background extends StatelessWidget {
               ),
 
               //CONTENIDO
-              Center(child: SafeArea(child: child)),
+              if (safeArea) Center(child: SafeArea(child: child)) else child,
             ],
           );
         },

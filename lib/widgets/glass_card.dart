@@ -3,8 +3,9 @@ import 'package:postulaciones_app/theme/app_colors.dart';
 
 class GlassCard extends StatelessWidget {
   final Widget child;
+  final double alpha;
 
-  const GlassCard({super.key, required this.child});
+  const GlassCard({super.key, required this.child, this.alpha = 0.5});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +14,10 @@ class GlassCard extends StatelessWidget {
       width: MediaQuery.sizeOf(context).width * 0.9,
       constraints: const BoxConstraints(maxWidth: 500),
       decoration: BoxDecoration(
-        color: context.colors.background.withValues(alpha: 0.75),
+        color: context.colors.background.withValues(alpha: alpha),
         border: Border.all(color: context.colors.inputFocusedBorder),
         borderRadius: BorderRadius.circular(12),
-        boxShadow:  [
+        boxShadow: [
           BoxShadow(
             color: context.colors.shadow,
             blurRadius: 5,

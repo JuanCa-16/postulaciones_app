@@ -15,4 +15,5 @@ class Environment {
   static String get estadosUrl => '$apiBaseUrl/estados';
   static String get postulacionesUrl => '$apiBaseUrl/postulaciones';
   static String get authUrl => '$apiBaseUrl/auth';
+  static String get estadisticasUrl => '$apiBaseUrl/estadisticas';
 }

@@ -14,7 +14,8 @@ class Estado {
   });
 
   Color get colorParsed {
-    return Color(int.parse(color.replaceAll('#', '0xFF')));
+    final valor = color.replaceFirst('#', '');
+    return Color(int.parse('FF$valor', radix: 16));
   }
 
   factory Estado.fromJson(Map<String, dynamic> json) {
