@@ -126,7 +126,7 @@ class _FiltrosPostulacionesState extends State<FiltrosPostulaciones> {
               width: double.infinity,
               child: Wrap(
                 spacing: 8,
-                runSpacing: 8,
+                runSpacing: 0,
                 alignment: WrapAlignment.center,
                 children: CriterioBusqueda.values.map((cri) {
                   return ChipOption(
@@ -146,7 +146,7 @@ class _FiltrosPostulacionesState extends State<FiltrosPostulaciones> {
               width: double.infinity,
               child: Wrap(
                 spacing: 8,
-                runSpacing: 8,
+                runSpacing: 0,
                 alignment: WrapAlignment.center,
                 children: widget.estados.map((estado) {
                   return ChipOption(
@@ -171,7 +171,7 @@ class _FiltrosPostulacionesState extends State<FiltrosPostulaciones> {
               width: double.infinity,
               child: Wrap(
                 spacing: 8,
-                runSpacing: 8,
+                runSpacing: 0,
                 alignment: WrapAlignment.center,
                 children: Modalidad.values.map((modalidad) {
                   return ChipOption(

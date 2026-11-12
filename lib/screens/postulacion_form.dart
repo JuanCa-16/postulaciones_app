@@ -183,6 +183,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
               width: double.infinity,
               child: Wrap(
                 spacing: 8,
+                runSpacing: 0,
                 alignment: WrapAlignment.start,
                 children: Modalidad.values.map((modalidadItem) {
                   return ChipOption(
@@ -208,6 +209,7 @@ class _PostulacionFormState extends State<PostulacionForm> {
               width: double.infinity,
               child: Wrap(
                 spacing: 8,
+                runSpacing: 0,
                 alignment: WrapAlignment.start,
                 children: widget.estados.map((estado) {
                   return ChipOption(

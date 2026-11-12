@@ -88,3 +88,16 @@ class EstadisticaFecha {
     return {'fecha': fecha, 'cantidad': cantidad};
   }
 }
+
+class RankingEstadistica {
+  final String nombre;
+  final int cantidad;
+
+  const RankingEstadistica({required this.nombre, required this.cantidad});
+
+  factory RankingEstadistica.fromJson(Map<String, dynamic> json) =>
+      RankingEstadistica(
+        nombre: json['nombre'] as String,
+        cantidad: (json['cantidad'] as num).toInt(),
+      );
+}

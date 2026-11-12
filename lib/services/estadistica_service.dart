@@ -78,4 +78,34 @@ class EstadisticaService {
 
     return apiResponse.data;
   }
+
+  Future<List<RankingEstadistica>> _ranking(String ruta, int? estadoId) async {
+    final uri = Uri.parse(
+      '$apiUrl/$ruta',
+    ).replace(queryParameters: {if (estadoId != null) 'estadoId': '$estadoId'});
+
+    final response = await _apiClient.get(uri.toString());
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+    if (response.statusCode != 200) {
+      throw Exception(json['message']);
+    }
+
+    final apiResponse = ApiResponse<List<RankingEstadistica>>.fromJson(json, (
+      data,
+    ) {
+      return (data as List)
+          .map((e) => RankingEstadistica.fromJson(e as Map<String, dynamic>))
+          .toList();
+    });
+
+    return apiResponse.data;
+  }
+
+  Future<List<RankingEstadistica>> topEmpresas({int? estadoId}) =>
+      _ranking('top-empresas', estadoId);
+
+  Future<List<RankingEstadistica>> topPaginas({int? estadoId}) =>
+      _ranking('top-paginas', estadoId);
 }
